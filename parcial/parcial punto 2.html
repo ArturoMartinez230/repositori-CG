@@ -2,13 +2,16 @@
 <html>
   <head>
     <meta charset= "utf-8">
-    <title> parcial</title>
+    <title> Tranforamaciones 3D</title>
     <style>
       body {margin:0;}
       canvas {display:block;}
     </style>
   </head>
   <body>
+        <script src="js/three.js"> </script>
+         <script src="js/dat.gui.min.js"> </script>
+          <script src="js/OrbitControls.js"> </script>
        
     <script>
         
@@ -38,8 +41,8 @@
 		  	var colorR = new THREE.Color( 0xAA3333 );
 		  	var colorG = new THREE.Color( 0x33AA33 );
 		  	var colorB = new THREE.Color( 0x333366 );
-		  
-		  		 
+		  			
+				 
 		  	camera.lookAt( origin );
             camera.position.x = 5;
 			camera.position.y = 10;	 
@@ -53,11 +56,23 @@
     
     function render(){
         var dtime = Date.now()-startTime;
-        
-            var P1=new THREE.Vector4(10,10,0,1);
+          var P1=new THREE.Vector4(10,10,0,1);
             var P2=new THREE.Vector4(40,10,0,1);
             var P3=new THREE.Vector4(40,40,0,1);
             var P4=new THREE.Vector4(10,40,0,1);
+        
+        //escalar
+        var sc=9;
+        var r = new THREE.Matrix4();
+        r.set( 	sc, 0, 0, 0,
+				0, sc, 0, 0, 
+				0, 0, sc, 0,
+				0, 0, 0, 1);
+        
+        P1.applyMatrix4(r);
+        P2.applyMatrix4(r);
+        P3.applyMatrix4(r);
+        P4.applyMatrix4(r);
            
         //ROTACION 
         var cs = Math.cos(40);
@@ -73,7 +88,6 @@
         P3.setAxisAngleFromRotationMatrix (y);
         P4.setAxisAngleFromRotationMatrix (y);
         
-        
         //TRASLACION 
         var tx=0, ty=0, tz=10;
 
@@ -88,25 +102,12 @@
             P3.applyMatrix4(t);
             P4.applyMatrix4(t);
         
-        
-        //escalar
-        var sc=9;
-        var r = new THREE.Matrix4();
-        r.set( 	sc, 0, 0, 0,
-				0, sc, 0, 0, 
-				0, 0, sc, 0,
-				0, 0, 0, 1);
-        
-        P1.applyMatrix4(r);
-        P2.applyMatrix4(r);
-        P3.applyMatrix4(r);
-        P4.applyMatrix4(r);
+
         
         console.log(P1);
         console.log(P2);
         console.Log(P3);
         console.log(P4);
-        
         
         camera.position.x = 15*Math.cos(dtime/10000);
         camera.position.z = 15*Math.sin(dtime/10000);
