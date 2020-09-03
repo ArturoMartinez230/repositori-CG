@@ -47,7 +47,18 @@
 			camera.position.y = 10;	 
 		  	camera.position.z =  10;
 			
-        
+        Geometria=new THREE.Geometry();
+        var vertices=[[10,10,0],[40,10,0],[40,40,0],[10,10,0]];
+        var largoVertice=vertices.length;
+        for(i=0;i<largoVertice;i++){
+            x=vertices[i][0];
+            y=vertices[i][1];
+            z=vertices[i][2];
+            vector=new THREE.Vector3(x,y,z);
+            Geometria.vertices.push(vector);
+        }
+            var material=new THREE.ParticleBasicMaterial({color:0xFF0000});
+            var cuadrado = new THREE.Line( Geometria, material); 
             
            
        Geometria2=new THREE.Geometry();
@@ -60,40 +71,39 @@
             vector=new THREE.Vector3(x,y,z);
             Geometria2.vertices.push(vector);
         }
-            material2=new THREE.ParticleBasicMaterial({color:0xFF0000});
-            cuadrado2=new THREE.line(Geometria2,material2);                 
+            
+            var material2=new THREE.ParticleBasicMaterial({color:0xFF0000});
+            var cuadrado2 = new THREE.Line( Geometria2, material2);                 
              
-            //escalar
-        var sc=9;
-        var r = new THREE.Matrix4();
-        r.set( 	sc, 0, 0, 0,
-				0, sc, 0, 0, 
-				0, 0, sc, 0,
-				0, 0, 0, 1);
+            var matrizT = new THREE.Matrix4();
+        matrizT.set(1,0,0,1,
+                    0,1,0,1,
+                    0,0,1,1,
+                    0,0,0,1);
         
-        cuadrado2.applyMatrix(r);
-           
-        //ROTACION 
-        var cs = Math.cos(40);
-        var ss=Math.sin(40);
-        var y=new THREE.Matrix4();
-        y.set(cs,  0, ss, 0,
-              0,  1,  0, 0, 
-              -ss,  0, cs, 0,
-            0,  0,  0, 1 );
+                    cuadrado2.applyMatrix(matrizT);         
         
-        cuadrado2.applyMatrix(y);
+        // Matriz de Escala
+        var matrizS = new THREE.Matrix4();
+        matrizS.set(5,0,0,0,
+                    0,1,0,0,
+                    0,0,1,0,
+                    0,0,0,1);
         
-        //TRASLACION 
-        var tx=0, ty=0, tz=10;
+                    cuadrado2.applyMatrix(matrizS);
+                    
+        // Matriz de Rotación
+        var matrizR = new THREE.Matrix4();
+        var alpha=30;
+		var cs = Math.cos(40);
+		var ss = Math.sin(40);
+		
+		matrizR.set(cs,  0, ss, 0,
+					 0,  1,  0, 0, 
+				    -ss,  0, cs, 0,
+					 0,  0,  0, 1 );	
 
-		    var t = new THREE.Matrix4();		
-		   t.set(1, 0, 0, tx,
-				0, 1, 0, ty, 
-				0, 0, 1, tz,
-				0, 0, 0, 1);
-        cuadrado2.applyMatrix(t);
-
+                     cuadrado2.applyMatrix(matrizR);
 		   
         			document.body.appendChild(renderer.domElement);
 				 
