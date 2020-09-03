@@ -1,0 +1,118 @@
+!DOCTYPE html >
+<html>
+  <head>
+    <meta charset= "utf-8">
+    <title> parcial</title>
+    <style>
+      body {margin:0;}
+      canvas {display:block;}
+    </style>
+  </head>
+  <body>
+       
+    <script>
+        
+	var scene, aspect, camera, renderer;
+		var startTime = Date.now();
+		
+		init();
+		animate();
+	
+		function init(){
+			scene = new THREE.Scene();
+			aspect = window.innerWidth / window.innerHeight;
+			camera = new THREE.PerspectiveCamera( 45, aspect, 0.1, 1000);
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+				  
+			var size = 10;
+			var arrowSize = 1;
+			var divisions = size;
+			var origin = new THREE.Vector3( 0, 0, 0 );
+			var x = new THREE.Vector3( 1, 0, 0 );
+			var y = new THREE.Vector3( 0, 1, 0 );
+		  	var z = new THREE.Vector3( 0, 0, 1 );
+			var color1 = new THREE.Color( 0xFFFFFF );
+		  	var color2 = new THREE.Color( 0x333333 );
+		  	var colorR = new THREE.Color( 0xAA3333 );
+		  	var colorG = new THREE.Color( 0x33AA33 );
+		  	var colorB = new THREE.Color( 0x333366 );
+		  
+		  		 
+		  	camera.lookAt( origin );
+            camera.position.x = 5;
+			camera.position.y = 10;	 
+		  	camera.position.z =  10;
+			}
+    
+    function animate() {
+        render();
+        requestAnimationFrame( animate );
+    }
+    
+    function render(){
+        var dtime = Date.now()-startTime;
+        
+            var P1=new THREE.Vector4(10,10,0,1);
+            var P2=new THREE.Vector4(40,10,0,1);
+            var P3=new THREE.Vector4(40,40,0,1);
+            var P4=new THREE.Vector4(10,40,0,1);
+           
+        //ROTACION 
+        var cs = Math.cos(40);
+        var ss=Math.sin(40);
+        var y=new THREE.Matrix4();
+        y.set(cs,  0, ss, 0,
+              0,  1,  0, 0, 
+              -ss,  0, cs, 0,
+            0,  0,  0, 1 );
+        
+        P1.setAxisAngleFromRotationMatrix (y);
+        P2.setAxisAngleFromRotationMatrix(y);
+        P3.setAxisAngleFromRotationMatrix (y);
+        P4.setAxisAngleFromRotationMatrix (y);
+        
+        
+        //TRASLACION 
+        var tx=0, ty=0, tz=10;
+
+		    var t = new THREE.Matrix4();		
+		   t.set(1, 0, 0, tx,
+				0, 1, 0, ty, 
+				0, 0, 1, tz,
+				0, 0, 0, 1);
+
+		    P1.applyMatrix4 (t);		
+            P2.applyMatrix4(t);
+            P3.applyMatrix4(t);
+            P4.applyMatrix4(t);
+        
+        
+        //escalar
+        var sc=9;
+        var r = new THREE.Matrix4();
+        r.set( 	sc, 0, 0, 0,
+				0, sc, 0, 0, 
+				0, 0, sc, 0,
+				0, 0, 0, 1);
+        
+        P1.applyMatrix4(r);
+        P2.applyMatrix4(r);
+        P3.applyMatrix4(r);
+        P4.applyMatrix4(r);
+        
+        console.log(P1);
+        console.log(P2);
+        console.Log(P3);
+        console.log(P4);
+        
+        
+        camera.position.x = 15*Math.cos(dtime/10000);
+        camera.position.z = 15*Math.sin(dtime/10000);
+        camera.lookAt( 0, 0, 0 );
+        renderer.render( scene, camera );
+    }
+      </script>
+  </body>
+</html>
