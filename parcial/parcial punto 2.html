@@ -41,27 +41,29 @@
 		  	var colorR = new THREE.Color( 0xAA3333 );
 		  	var colorG = new THREE.Color( 0x33AA33 );
 		  	var colorB = new THREE.Color( 0x333366 );
-		  			
-				 
-		  	camera.lookAt( origin );
+            
+            camera.lookAt( origin );
             camera.position.x = 5;
 			camera.position.y = 10;	 
 		  	camera.position.z =  10;
-			}
-    
-    function animate() {
-        render();
-        requestAnimationFrame( animate );
-    }
-    
-    function render(){
-        var dtime = Date.now()-startTime;
-          var P1=new THREE.Vector4(10,10,0,1);
-            var P2=new THREE.Vector4(40,10,0,1);
-            var P3=new THREE.Vector4(40,40,0,1);
-            var P4=new THREE.Vector4(10,40,0,1);
+			
         
-        //escalar
+            
+           
+       Geometria2=new THREE.Geometry();
+        var vertices=[[10,10,0],[40,10,0],[40,40,0],[10,10,0]];
+        var largoVertice=vertices.length;
+        for(i=0;i<largoVertice;i++){
+            x=vertices[i][0];
+            y=vertices[i][1];
+            z=vertices[i][2];
+            vector=new THREE.Vector3(x,y,z);
+            Geometria2.vertices.push(vector);
+        }
+            material2=new THREE.ParticleBasicMaterial({color:0xFF0000});
+            cuadrado2=new THREE.line(Geometria2,material2);                 
+             
+            //escalar
         var sc=9;
         var r = new THREE.Matrix4();
         r.set( 	sc, 0, 0, 0,
@@ -69,10 +71,7 @@
 				0, 0, sc, 0,
 				0, 0, 0, 1);
         
-        P1.applyMatrix4(r);
-        P2.applyMatrix4(r);
-        P3.applyMatrix4(r);
-        P4.applyMatrix4(r);
+        cuadrado2.applyMatrix(r);
            
         //ROTACION 
         var cs = Math.cos(40);
@@ -83,10 +82,7 @@
               -ss,  0, cs, 0,
             0,  0,  0, 1 );
         
-        P1.setAxisAngleFromRotationMatrix (y);
-        P2.setAxisAngleFromRotationMatrix(y);
-        P3.setAxisAngleFromRotationMatrix (y);
-        P4.setAxisAngleFromRotationMatrix (y);
+        cuadrado2.applyMatrix(y);
         
         //TRASLACION 
         var tx=0, ty=0, tz=10;
@@ -96,19 +92,22 @@
 				0, 1, 0, ty, 
 				0, 0, 1, tz,
 				0, 0, 0, 1);
+        cuadrado2.applyMatrix(t);
 
-		    P1.applyMatrix4 (t);		
-            P2.applyMatrix4(t);
-            P3.applyMatrix4(t);
-            P4.applyMatrix4(t);
-        
+		   
+        			document.body.appendChild(renderer.domElement);
+				 
+        }
+    function animate() {
+        render();
+        requestAnimationFrame( animate );
+    }
+    
+    function render(){
+        var dtime = Date.now()-startTime;
+          var P1=new THREE.Vector4(10,10,0,1);
+            
 
-        
-        console.log(P1);
-        console.log(P2);
-        console.Log(P3);
-        console.log(P4);
-        
         camera.position.x = 15*Math.cos(dtime/10000);
         camera.position.z = 15*Math.sin(dtime/10000);
         camera.lookAt( 0, 0, 0 );
