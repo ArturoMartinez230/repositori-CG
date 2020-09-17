@@ -274,18 +274,7 @@
                 }
             }
             
-             var geoCilindro2 = new THREE.Geometry();
-            var zTemp = 0;
-            var res = 55.0;
-            for( var i = 0; i < res; i++){
-                for( var j = 0; j < res; j++){
-                    var punto = new THREE.Vector3();
-                    punto.x = 2 * Math.cos( ( j * 2 * Math.PI )/res);
-                    punto.y = 3 * i/res;
-                    punto.z = 2 * Math.sin( ( j * 2 * Math.PI )/res);
-                    geoCilindro.vertices.push( punto );
-                }
-            }
+             
             
 			
 			//CREAR LOS MATERIALES
@@ -294,7 +283,6 @@
             var matPunto3 = new THREE.PointsMaterial( { color: 0xFBFF00, size: 0.1} );
             var matPunto4 = new THREE.PointsMaterial( { color: 0xFF8000, size: 0.1 } );
             var matPunto5 = new THREE.PointsMaterial( { color: 0x32FF00 , size: 0.1 } );
-            var matPunto6 = new THREE.PointsMaterial( { color: 0xAB6D2C , size: 0.1 } );
 			//CREAR LOS OBJETOS
 			hips = new THREE.Points( geometry1, matPunto );	
 			leftFoot = hips.clone();
@@ -305,8 +293,9 @@
             cubo=new THREE.Mesh(geometry8,matPunto4);
 			cubo2=cubo.clone();
             cubo3=cubo.clone();
+            cubo4=cubo.clone();
             tuberia=new THREE.Points(geoCilindro,matPunto5);
-            goomba=new THREE.Points(geoCilindro2,matPunto6);
+            
             
 			leftLeg.applyMatrix( new THREE.Matrix4().makeScale(.5,2,.5) );
 			leftLeg.applyMatrix( new THREE.Matrix4().makeTranslation(-.5,-1,0) );
@@ -330,7 +319,8 @@
             scene.add(cubo2);
             scene.add(cubo3);
             scene.add(tuberia);
-            scene.add(goomba);
+            scene.add(cubo4);
+            
             
             
 			//scene.add( leftLeg );
@@ -351,8 +341,9 @@
             cubo3.position.z=-2;
             tuberia.position.z=-5;
             tuberia.position.y=-2;
-            goomba.position.y=5;
-            goomba.position.z=4;
+            cubo4.position.y=5;
+            cubo4.position.z=-4;
+            
 			
 			renderer.render( scene, camera );
            
