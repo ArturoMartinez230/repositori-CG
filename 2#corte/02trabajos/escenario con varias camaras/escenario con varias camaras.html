@@ -75,7 +75,7 @@
 					fov: 60,
 					updateCamera: function ( camera, scene) {
 
-					  camera.position.y = 0.01;
+					  camera.position.y += 0.01;
 					  camera.position.z = Math.max( Math.min( camera.position.y, 1600 ), - 1600 );
 					  camera.lookAt( scene.position );
 
