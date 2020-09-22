@@ -1,7 +1,7 @@
  <!doctype html>
 <html>
     <head>
-        <title>escenario de videjuego</title>
+        <title>escenario juego</title>
         <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=-6aaR6DTkUZhq7GmA8IhzyoZYxvBXSdz393N2rkmCahk_xTdQTaic1cuqQ3bmEnbcM5SyYR6vs8R-Pdlm2f5y5A686Dmy20KP4c8lZ9mhkZ3da-7TOKx6CFWa9G1ME3TlP5uFTXLSkNx7Y-qrCYUd0zCgMmJcEbZOhem8spX7abGn71YO6M6-vLcIs4yp0iKtMcazIyO8y8KnZPGURdKLmkH8gms9yu_EYVtPaa88zXXxSZc5SZChkK4hqrG_EAtu-saFNHCXDbK3mfSEZZzbNQQv2Ju8qraUCHSe4fkowuvC43PRKY3u9s9NQRPFGS0uTm2GCExutvDvsNKVsE-JA0c5R8c32hQPRMqCaK_PemxpkuIX1nb9rnTIXMDGi5RFTRcb0MKiNv3yf5TerqYTAYIkO5tghhxGsc4lelqLzn8hoqIoFR4tv3_ALZx3FeUKgqXH6QqIrf49yv80tmOoZHNAT0kHIPUFknd4DnrK8klFA_8A9WAXMgrOLO1yrYS27eR3-XMhphiXtv3NFQp2F5gCrWsb2sOrt5WRCoBEy3pMqwz5y2jAIHXtsfOCciE9zUelHyweiWQk5ZO-cQKrGR6FUL9SjrWTS7A9J5Zz5lQNBhl3rleVwUw86hOb8o1CW48X-5uLZ9dneg4oFqJ19EmwzXHL-0ZyeWiyiKRbSCPlh8ucbN8WneTlh9BtFi6zXaI2zviY7_F0cllpDXd1ebn4ocwqBWYUy3ehijP7uLJ3TZpTcjfNQKOqqo8MZ_tutq_fxiT0MaGhSUEIbx-Mz07RxXipmlu_6EqkN9yOBn2z5xVJJZ3Ul-g1-ozV9GbFrX2_wMRoc5EMGFRgRbgbnb_PFbzsWJmEVK_omdj90ULcVYGeshwB8epDEuInesD0XSLNsOYEeDAMfYIc0BoUNKLoxoh-SHV9IH8Q275nHbAdE7SaAddlS7Ebi31lDC5JTPyd3HfNzcniO99CEo9lm0bApyGvaMLYQfU7D_PPNHYoQN1ALwy6X7QMnQGl6nSndK9DjbwhaPk52aZE_OJIV7e3Ae5SdPw4b9Vd2qdjHWuFoqCcL5gsv6wzCs9iHmlMMkWrHx6rr4HjR-e5uLrIgP9IzAgomZY6-b_JET29fkh1D7r8kSQyVoV-L1Z8LWTFgs2jYlTGB6joF9dh8K1qjm4h0HA4KcEqf2pdaU4vsvhDhu3mZ9jlhBviQ9KZU079uuqPpBgQtQSbOpEeBiOmQ" nonce="3b2d35ef3370812a105e0f300e984a83" charset="UTF-8"></script><style>
             html, body { margin: 0; padding: 0; overflow: hidden; }
             #info {
@@ -14,14 +14,15 @@
         </style>
     </head>
     <body>
-        <div id="info">SUPER MARIO BROS<br/>
+        <div id="info">escenario juego: wii sports boxeo<br/>
+            
         </div>
         
     <script src="js/three.min.js"></script>
     <script>
         
 		var scene, aspect, camera, renderer;
-		var geometry1, geometry2,geometry5,geometry6,geometry8;
+		var geometry1, geometry2;
 		var hips, torso, head;
 		var rightFoot, rightLeg, rightArm, rightHand;
 		var leftFoot, leftLeg, leftArm, leftHand;
@@ -48,34 +49,50 @@
 				{
 					left:0,
                     bottom: 0,
-                    width: 1,
+                    width: 0.4,
                     height: 0.5,
-					background: new THREE.Color(0.1,0.7,0),
+					background: new THREE.Color(0x000000),
 					eye: [ 0, 20, 0],
 					up: [ 1, 0, 0 ],
 					fov: 60,
 					updateCamera: function ( camera, scene ) {
 
-					  camera.position.z +=  0.01;
+					  camera.position.x =  0;
 					  camera.position.x = Math.max( Math.min( camera.position.x, 2000 ), - 2000 );
 					  camera.lookAt( scene.position );
 
 					}
 				},
 				
-				
+				{
+					left: 0.5,
+					bottom: 0,
+					width: 0.3,
+					height: 0.5,
+					background: new THREE.Color( 0x000000),
+					eye: [ 0, 20, 0],
+					up: [ 0, 0, 1 ],
+					fov: 60,
+					updateCamera: function ( camera, scene) {
+
+					  
+					  camera.position.z =  0;
+					  camera.lookAt( scene.position );
+
+					}
+				},
         {
-            left: 0,
-            bottom: 0.5,
-            width:1,
-            height:0.5,
-            background: new THREE.Color( 0.1, 0.2, 0.7 ),
+                   left: 0,
+                   bottom: 0.5,
+                   width:1,
+                   height:0.5,
+                    background: new THREE.Color(0x000000 ),
 					eye: [ 140, 800, 140 ],
 					up: [ 0, 1, 0],
 					fov: 60,
 					updateCamera: function ( camera, scene) {
 
-					  camera.position.y += 0.01;
+					  camera.position.y = 0.01;
 					  camera.position.z = Math.max( Math.min( camera.position.y, 1600 ), - 1600 );
 					  camera.lookAt( scene.position );
 
@@ -188,40 +205,386 @@
 		  	var colorGd = new THREE.Color( 0x66AA66 );
 		  	var colorBd = new THREE.Color( 0x6666AA );
 		  
-		  	//CREAR LAS GRILLAS PARA EL ESCENARIO
-		  	var axesHelper1 = new THREE.AxesHelper( size/10 );
-			var axesHelper2 = new THREE.AxesHelper( size/10 );
-			var axesHelper3 = new THREE.AxesHelper( size/10 );
-		  	var gridHelperXY = new THREE.GridHelper( size, divisions, color1, color1);
-		  	var gridHelperXZ = new THREE.GridHelper( size, divisions, color2, color2 );
-		  	var gridHelperYZ = new THREE.GridHelper( size, divisions, color2, color2 );
+		  	//personajes
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Cabeza = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Cabeza.name = 'Cabeza';
+        scene.add(Cabeza);
+        Cabeza.translateX(1.0).translateY(1.0).translateZ(1.0);
+
+        //Cuerpo
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.35,0.5,1.5,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Cuerpo = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Cuerpo.name = 'Cuerpo';
+        scene.add(Cuerpo);
+        Cuerpo.translateX(0).translateY(-1.5).translateZ(0);
+        
+        //Hombro_1
+        var sphereGeometry = new THREE.SphereGeometry(0.3,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Hombro_1 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Hombro_1.name = 'Hombro_1';
+        scene.add(Hombro_1);
+        Hombro_1.translateX(0.5).translateY(0.4).translateZ(0);
+        
+        //Brazo_1
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.2,0.65,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Brazo_1 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Brazo_1.name = 'Brazo_1';
+        scene.add(Brazo_1);
+        Brazo_1.translateX(1.5).translateY(-0.5).translateZ(1);
+        
+        //Codo_1
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Codo_1 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Codo_1.name = 'Codo_1';
+        scene.add(Codo_1);
+        Codo_1.translateX(0).translateY(-0.7).translateZ(0);
+        
+        //AnteBrazo_1
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.17,0.13,0.6,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0xFF0000  } );
+        sphereMaterial.transparent = true;
+        var AnteBrazo_1 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        AnteBrazo_1.name = 'AnteBrazo_1';
+        scene.add(AnteBrazo_1);
+        AnteBrazo_1.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Hombro_2
+        var sphereGeometry = new THREE.SphereGeometry(0.3,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Hombro_2 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Hombro_2.name = 'Hombro_2';
+        scene.add(Hombro_2);
+        Hombro_2.translateX(-0.5).translateY(0.4).translateZ(0);
+        
+        //Brazo_2
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.2,0.65,25,1);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Brazo_2 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Brazo_2.name = 'Brazo_2';
+        scene.add(Brazo_2);
+        Brazo_2.translateX(0.5).translateY(-0.5).translateZ(1.0);
+        
+        //Codo_2
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Codo_2 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Codo_2.name = 'Codo_2';
+        scene.add(Codo_2);
+        Codo_2.translateX(0).translateY(-0.7).translateZ(0);
+        
+        //AnteBrazo_2
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.17,0.13,0.6,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0xFF0000  } );
+        sphereMaterial.transparent = true;
+        var AnteBrazo_2 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        AnteBrazo_2.name = 'AnteBrazo_2';
+        scene.add(AnteBrazo_2);
+       AnteBrazo_2.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Cadera
+
+        var sphereGeometry = new THREE.SphereGeometry(0.49,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xFF0000  } );
+        sphereMaterial.transparent = true;
+        var Cadera = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Cadera.name = 'Cadera';
+        scene.add(Cadera);
+        Cadera.translateX(0).translateY(-0.7).translateZ(0);
+        
+        //EntrePierna_1
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial =new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var EntrePierna_1 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        EntrePierna_1.name = 'EntrePierna_1';
+        scene.add(EntrePierna_1);
+        EntrePierna_1.translateX(0.3).translateY(-0.3).translateZ(0);
+        
+        //Pierna_1
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.2,0.7,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Pierna_1 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Pierna_1.name = 'Pierna_1';
+        scene.add(Pierna_1);
+        Pierna_1.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Rodilla_1
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Rodilla_1 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Rodilla_1.name = 'Rodilla_1';
+        scene.add(Rodilla_1);
+        Rodilla_1.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Canilla_1
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.1,0.5,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0xFF0000  } );
+        sphereMaterial.transparent = true;
+        var Canilla_1 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Canilla_1.name = 'Canilla_1';
+        scene.add(Canilla_1);
+        Canilla_1.translateX(0).translateY(-0.3).translateZ(0);
+
+         
+        //EntrePierna_2
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var EntrePierna_2 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        EntrePierna_2.name = 'EntrePierna_2';
+        scene.add(EntrePierna_2);
+        EntrePierna_2.translateX(-0.25).translateY(-0.3).translateZ(0);
+        
+        //Pierna_2
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.2,0.7,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Pierna_2 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Pierna_2.name = 'Pierna_2';
+        scene.add(Pierna_2);
+        Pierna_2.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Rodilla_2
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xDCB8B8 } );
+        sphereMaterial.transparent = true;
+        var Rodilla_2 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Rodilla_2.name = 'Rodilla_2';
+        scene.add(Rodilla_2);
+        Rodilla_2.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Canilla_2
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.1,0.5,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0xFF0000  } );
+        sphereMaterial.transparent = true;
+        var Canilla_2 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Canilla_2.name = 'Canilla_2';
+        scene.add(Canilla_2);
+        Canilla_2.translateX(0).translateY(-0.3).translateZ(0);
             
-            //ROTARLAS PARA QUE QUEDEN EN EL ESPACIO ADECUADO
-            gridHelperXY.rotateOnWorldAxis ( x, THREE.Math.degToRad(90) );
-            gridHelperXZ.rotateOnWorldAxis ( y, THREE.Math.degToRad(90) );
-            gridHelperYZ.rotateOnWorldAxis ( z, THREE.Math.degToRad(90) );
-            
-            //CREAR LAS FLECHAS QUE INDICAN LOS EJES DE COORDENADAS 3D
-            var arrowX = new THREE.ArrowHelper( x, origin, arrowSize, colorR );
-            var arrowY = new THREE.ArrowHelper( y, origin, arrowSize, colorG );
-            var arrowZ = new THREE.ArrowHelper( z, origin, arrowSize, colorB );
-			
-			//CREAR LAS GEOMETRÍAS
-			var geometry1 = new THREE.Geometry();
-            var zTemp = 0;
-            var resXY = 20.0;
-			var resZ = 20.0;
-            for( var i = 0; i < resZ; i++){
-                for( var j = 0; j < resXY; j++){
-                    var punto = new THREE.Vector3();
-                    punto.x = 1 * Math.cos( ( j * 2 * Math.PI )/resXY) * Math.sin( ( i * Math.PI )/ resZ) ;
-                    punto.y = 1 * Math.sin( ( j * 2 * Math.PI )/resXY) * Math.sin( ( i * Math.PI )/ resZ) ;
-                    punto.z = 1 * Math.cos( ( i * Math.PI )/resZ) ;
-                    geometry1.vertices.push( punto );
-                }
-            }
-            geometry5 = new THREE.BoxGeometry( 1, 1, 20 );
-			for ( var i = 25; i < geometry5.faces.length; i ++ ) {
+            //personaje 2
+             //Cabeza
+
+        var sphereGeometry = new THREE.SphereGeometry(0.85,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Cabeza2 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Cabeza2.name = 'Cabeza2';
+        scene.add(Cabeza2);
+        Cabeza2.translateX(1.0).translateY(1.0).translateZ(1.0);
+
+        //Cuerpo
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.35,0.5,1.5,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Cuerpo2 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Cuerpo2.name = 'Cuerpo2';
+        scene.add(Cuerpo2);
+        Cuerpo2.translateX(0).translateY(-1.5).translateZ(0);
+        
+        //Hombro_1
+        var sphereGeometry = new THREE.SphereGeometry(0.3,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Hombro_3 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Hombro_3.name = 'Hombro_3';
+        scene.add(Hombro_3);
+        Hombro_3.translateX(0.5).translateY(0.4).translateZ(0);
+        
+        //Brazo_1
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.2,0.65,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Brazo_3 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Brazo_3.name = 'Brazo_3';
+        scene.add(Brazo_3);
+        Brazo_3.translateX(1.5).translateY(-0.5).translateZ(1);
+        
+        //Codo_1
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Codo_3 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Codo_3.name = 'Codo_3';
+        scene.add(Codo_3);
+        Codo_3.translateX(0).translateY(-0.7).translateZ(0);
+        
+        //AnteBrazo_1
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.17,0.13,0.6,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0x001FFF   } );
+        sphereMaterial.transparent = true;
+        var AnteBrazo_3 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        AnteBrazo_3.name = 'AnteBrazo_3';
+        scene.add(AnteBrazo_3);
+        AnteBrazo_3.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Hombro_2
+        var sphereGeometry = new THREE.SphereGeometry(0.3,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Hombro_4 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Hombro_4.name = 'Hombro_4';
+        scene.add(Hombro_4);
+        Hombro_4.translateX(-0.5).translateY(0.4).translateZ(0);
+        
+        //Brazo_2
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.2,0.65,25,1);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Brazo_4 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Brazo_4.name = 'Brazo_4';
+        scene.add(Brazo_4);
+        Brazo_4.translateX(0.5).translateY(-0.5).translateZ(1.0);
+        
+        //Codo_2
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x4F4030 } );
+        sphereMaterial.transparent = true;
+        var Codo_4 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Codo_4.name = 'Codo_4';
+        scene.add(Codo_4);
+        Codo_4.translateX(0).translateY(-0.7).translateZ(0);
+        
+        //AnteBrazo_2
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.17,0.13,0.6,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0x001FFF  } );
+        sphereMaterial.transparent = true;
+        var AnteBrazo_4 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        AnteBrazo_4.name = 'AnteBrazo_4';
+        scene.add(AnteBrazo_4);
+       AnteBrazo_4.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Cadera
+
+        var sphereGeometry = new THREE.SphereGeometry(0.49,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x001FFF   } );
+        sphereMaterial.transparent = true;
+        var Cadera2 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Cadera2.name = 'Cadera2';
+        scene.add(Cadera2);
+        Cadera2.translateX(0).translateY(-0.7).translateZ(0);
+        
+        //EntrePierna_1
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial =new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var EntrePierna_3 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        EntrePierna_3.name = 'EntrePierna_3';
+        scene.add(EntrePierna_3);
+        EntrePierna_3.translateX(0.3).translateY(-0.3).translateZ(0);
+        
+        //Pierna_1
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.2,0.7,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Pierna_3 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Pierna_3.name = 'Pierna_3';
+        scene.add(Pierna_3);
+        Pierna_3.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Rodilla_1
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Rodilla_3 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Rodilla_3.name = 'Rodilla_3';
+        scene.add(Rodilla_3);
+        Rodilla_3.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Canilla_1
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.1,0.5,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0x001FFF   } );
+        sphereMaterial.transparent = true;
+        var Canilla_3 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Canilla_3.name = 'Canilla_3';
+        scene.add(Canilla_3);
+        Canilla_3.translateX(0).translateY(-0.3).translateZ(0);
+
+         
+        //EntrePierna_2
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var EntrePierna_4 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        EntrePierna_4.name = 'EntrePierna_4';
+        scene.add(EntrePierna_4);
+        EntrePierna_4.translateX(-0.25).translateY(-0.3).translateZ(0);
+        
+        //Pierna_2
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.2,0.7,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Pierna_4 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Pierna_4.name = 'Pierna_4';
+        scene.add(Pierna_4);
+        Pierna_4.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Rodilla_2
+
+        var sphereGeometry = new THREE.SphereGeometry(0.2,32,32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x4F4030  } );
+        sphereMaterial.transparent = true;
+        var Rodilla_4 = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+        Rodilla_4.name = 'Rodilla_4';
+        scene.add(Rodilla_4);
+        Rodilla_4.translateX(0).translateY(-0.4).translateZ(0);
+        
+        //Canilla_2
+
+        var cylinderGeometry= new THREE.CylinderGeometry(0.2,0.1,0.5,25,1);
+        var cylinderMaterial= new THREE.MeshBasicMaterial( {color: 0x001FFF   } );
+        sphereMaterial.transparent = true;
+        var Canilla_4 = new THREE.Mesh(cylinderGeometry, cylinderMaterial); 
+        Canilla_4.name = 'Canilla_4';
+        scene.add(Canilla_4);
+        Canilla_4.translateX(0).translateY(-0.3).translateZ(0);
+
+            //Punto
+           geometry5 = new THREE.BoxGeometry( 10, 1, 10 );
+			for ( var i = 0; i < geometry5.faces.length; i ++ ) {
 				switch(i){
 					case 0: case 1: geometry5.faces[ i ].color = colorRd; break;
 					case 2: case 3: geometry5.faces[ i ].color = colorRd; break;
@@ -231,72 +594,46 @@
 					case 10: case 11: geometry5.faces[ i ].color = colorBd; break;
 				}				
 			}
-             geometry6 = new THREE.BoxGeometry( 1, 1, 1 );
-			for ( var i = 25; i < geometry1.faces.length; i ++ ) {
+            var geometry6 = new THREE.CylinderBufferGeometry( 0.3, 0.3, 3.5, 32 );
+            var geometry7 = new THREE.CylinderBufferGeometry( 0.3, 0.3, 3.5, 32 );
+            var geometry8 = new THREE.CylinderBufferGeometry( 0.3, 0.3, 3.5, 32 );
+			
+			//CREAR LAS GEOMETRÍAS
+			geometry1 = new THREE.BoxGeometry( 1, 1, 1 );
+			for ( var i = 0; i < geometry1.faces.length; i ++ ) {
 				switch(i){
-					case 0: case 1: geometry6.faces[ i ].color = colorRd; break;
-					case 2: case 3: geometry6.faces[ i ].color = colorRd; break;
-					case 4: case 5: geometry6.faces[ i ].color = colorGd; break;
-					case 6: case 7: geometry6.faces[ i ].color = colorGd; break;
-					case 8: case 9: geometry6.faces[ i ].color = colorBd; break;
-					case 10: case 11: geometry6.faces[ i ].color = colorBd; break;
+					case 0: case 1: geometry1.faces[ i ].color = colorRd; break;
+					case 2: case 3: geometry1.faces[ i ].color = colorRd; break;
+					case 4: case 5: geometry1.faces[ i ].color = colorGd; break;
+					case 6: case 7: geometry1.faces[ i ].color = colorGd; break;
+					case 8: case 9: geometry1.faces[ i ].color = colorBd; break;
+					case 10: case 11: geometry1.faces[ i ].color = colorBd; break;
 				}				
 			}
-            geometry8 = new THREE.BoxGeometry( 1, 1, 1 );
-			for ( var i = 25; i < geometry1.faces.length; i ++ ) {
-				switch(i){
-					case 0: case 1: geometry8.faces[ i ].color = colorRd; break;
-					case 2: case 3: geometry8.faces[ i ].color = colorRd; break;
-					case 4: case 5: geometry8.faces[ i ].color = colorGd; break;
-					case 6: case 7: geometry8.faces[ i ].color = colorGd; break;
-					case 8: case 9: geometry8.faces[ i ].color = colorBd; break;
-					case 10: case 11: geometry8.faces[ i ].color = colorBd; break;
-				}				
-			}
-			geometry2 = new THREE.CylinderGeometry( .5, .5, 1, 32 );
-			for ( var i = 25; i < geometry2.faces.length; i++) { 
+			geometry2 = new THREE.CylinderGeometry( .5, .5, 4, 32 );
+			for ( var i = 0; i < geometry2.faces.length; i++) { 
 				if( geometry2.faces[i].normal.y != 0) { 
 					geometry2.faces[i].color = colorGd; 
 				} 
 			}
-            
-        
-            var geoCilindro = new THREE.Geometry();
-            var zTemp = 0;
-            var res = 55.0;
-            for( var i = 0; i < res; i++){
-                for( var j = 0; j < res; j++){
-                    var punto = new THREE.Vector3();
-                    punto.x = 2 * Math.cos( ( j * 2 * Math.PI )/res);
-                    punto.y = 3 * i/res;
-                    punto.z = 2 * Math.sin( ( j * 2 * Math.PI )/res);
-                    geoCilindro.vertices.push( punto );
-                }
-            }
-            
-             
-            
 			
 			//CREAR LOS MATERIALES
-			var matPunto = new THREE.PointsMaterial( { color: 0xFF0F00, size: 0.1} );
-			var matPunto2 = new THREE.PointsMaterial( { color: 0xFF8000, size: 0.1 } );
-            var matPunto3 = new THREE.PointsMaterial( { color: 0xFBFF00, size: 0.1} );
-            var matPunto4 = new THREE.PointsMaterial( { color: 0xFF8000, size: 0.1 } );
-            var matPunto5 = new THREE.PointsMaterial( { color: 0x32FF00 , size: 0.1 } );
+			var material = new THREE.MeshBasicMaterial( { color: color1, vertexColors: THREE.FaceColors } );
+            var material5 = new THREE.MeshBasicMaterial( { color: 0x85EBEE  })
+            var material6 = new THREE.MeshBasicMaterial( {color: 0xFFFFFF } );
+            var material7 = new THREE.MeshBasicMaterial( {color: 0x0013FF } );
+            var material8 = new THREE.MeshBasicMaterial( {color: 0xFF0000 } );
+			var suelo = new THREE.Mesh( geometry5, material5 );
+            var tubo = new THREE.Mesh( geometry6, material6 );
+            var tubo3=new THREE.Mesh(geometry7,material7);
+            var tubo4 = new THREE.Mesh( geometry8, material8 );
+			
 			//CREAR LOS OBJETOS
-			hips = new THREE.Points( geometry1, matPunto );	
+			hips = new THREE.Mesh( geometry1, material );	//CUBO
 			leftFoot = hips.clone();
-			leftLeg = new THREE.Points( geometry2, matPunto ); 
-            
-            suelo=new THREE.Mesh(geometry5,matPunto2);
-            cubosorpresa=new THREE.Mesh(geometry6,matPunto3);
-            cubo=new THREE.Mesh(geometry8,matPunto4);
-			cubo2=cubo.clone();
-            cubo3=cubo.clone();
-            cubo4=cubo.clone();
-            tuberia=new THREE.Points(geoCilindro,matPunto5);
-            
-            
+			
+			leftLeg = new THREE.Mesh( geometry2, material ); //CILINDRO
+			
 			leftLeg.applyMatrix( new THREE.Matrix4().makeScale(.5,2,.5) );
 			leftLeg.applyMatrix( new THREE.Matrix4().makeTranslation(-.5,-1,0) );
 			leftFoot.applyMatrix( new THREE.Matrix4().getInverse( leftLeg.matrix ) );
@@ -308,42 +645,81 @@
 			hips.add(rightLeg);
 		
 		  	//AGREGAR A LA ESCENA
-            scene.add( gridHelperXZ );
-		  	scene.add( arrowX );	
-		  	scene.add( arrowY );	
-		  	scene.add( arrowZ );	
-			scene.add( hips );
-            scene.add(suelo);
-            scene.add(cubosorpresa);
-            scene.add(cubo);
-            scene.add(cubo2);
-            scene.add(cubo3);
-            scene.add(tuberia);
-            scene.add(cubo4);
+            Cabeza.add(Cuerpo);
+            Cuerpo.add(Hombro_1);
+            Cuerpo.add(Hombro_2);
+            //Cuerpo.add(Cabeza);
+            Cuerpo.add(Cadera);
+            Hombro_1.add(Codo_1);
+            Hombro_2.add(Codo_2);
+            Codo_1.add(AnteBrazo_1);
+            Codo_2.add(AnteBrazo_2);
+            Cadera.add(EntrePierna_1);
+            Cadera.add(EntrePierna_2);
+            EntrePierna_1.add(Pierna_1);
+            EntrePierna_2.add(Pierna_2);
+            Pierna_1.add(Rodilla_1);
+            Pierna_2.add(Rodilla_2);
+            Rodilla_1.add(Canilla_1);
+            Rodilla_2.add(Canilla_2);
+            
+              
+            Cabeza2.add(Cuerpo2);
+            Cuerpo2.add(Hombro_3);
+            Cuerpo2.add(Hombro_4);
+            Cuerpo2.add(Cadera2);
+            Hombro_3.add(Codo_3);
+            Hombro_4.add(Codo_4);
+            Codo_3.add(AnteBrazo_3);
+            Codo_4.add(AnteBrazo_4);
+            Cadera2.add(EntrePierna_3);
+            Cadera2.add(EntrePierna_4);
+            EntrePierna_3.add(Pierna_3);
+            EntrePierna_4.add(Pierna_4);
+            Pierna_3.add(Rodilla_3);
+            Pierna_4.add(Rodilla_4);
+            Rodilla_3.add(Canilla_3);
+            Rodilla_4.add(Canilla_4);
+
+		  
+		  	//AGREGAR A LA ESCENA
+		  	scene.add(suelo);
+            tubo2=tubo.clone();
+            scene.add(tubo);
+            scene.add(tubo2);
+			scene.add(tubo3);
+            scene.add(tubo4);
+            scene.add(Cabeza);
+            scene.add(Cabeza2);
+            suelo.position.y=-2;
+            
+            tubo.position.x=5;
+            tubo.position.z=5;
+            tubo2.position.x=-5;
+            tubo2.position.z=-5;
+            
+            tubo3.position.z=5;
+            tubo3.position.x=-5;
+            tubo4.position.z=-5;
+            tubo4.position.x=5;
+            
+            Cabeza.position.y=2;
+            Cabeza.position.x=4;
+            Cabeza.position.z=-3;
+            Cabeza.rotation.y=0.3;
             
             
-            
-			//scene.add( leftLeg );
+            Cabeza2.position.z=3;
+            Cabeza2.position.y=2;
+            Cabeza2.position.x=-4;
+            Cabeza2.rotation.y=-3;
+			
 			
 			//MOVER LA CAMARA
 			camera.position.x = 10;
 			camera.position.y = 3;	 
 		  	camera.position.z = 10;			
 		  	camera.lookAt( origin );
-            suelo.position.y=-2;
-            cubosorpresa.position.y=3;
-            cubosorpresa.position.z=4;
-            cubo.position.y=3;
-            cubo.position.z=3;
-            cubo2.position.y=3;
-            cubo2.position.z=5;
-            cubo3.position.y=5;
-            cubo3.position.z=-2;
-            tuberia.position.z=-5;
-            tuberia.position.y=-2;
-            cubo4.position.y=5;
-            cubo4.position.z=-4;
-            
 			
 			renderer.render( scene, camera );
            
