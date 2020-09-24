@@ -45,6 +45,8 @@ camera.position.z = 30;
 function render() {
   requestAnimationFrame( render );
   renderer.render( scene, camera );
+   cylinder.rotation.x += 0.0;
+  cylinder.rotation.y += 0.01;
 }
 render();
     </script>
