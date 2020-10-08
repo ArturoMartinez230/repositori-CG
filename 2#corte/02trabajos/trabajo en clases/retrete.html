@@ -25,12 +25,8 @@
 			document.body.appendChild( renderer.domElement );
             
             controls = new THREE.OrbitControls( camera, renderer.domElement );
-		  
-		  	
-			
-			//CREAR LAS GEOMETRÍAS
-            //vertices
             
+            //crear la geometria
             const points = [];
               for (let i = 0; i < 3; ++i) {
                points.push(new THREE.Vector2(Math.sin(i * 0.2) * 1 + 1, (i - 1) * .8));
@@ -43,11 +39,13 @@
             var geometry6 = new THREE.CircleGeometry( 1.5, 32 );
 			var geometry = new THREE.CylinderGeometry( 1, 1, 2, 32 );
             
+            //crear los materiales
             var material3=new THREE.MeshBasicMaterial({color:0x726E6C});
             var material2=new THREE.MeshBasicMaterial({ color:0x6A503B });
             var material = new THREE.MeshBasicMaterial( {color: 0xE5E5E5 } );
             var material4 = new THREE.MeshBasicMaterial( {color: 0xD8D0CA } );
             
+            //creacion del obejto
             var cono = new THREE.Mesh( geometry2, material2 );
             var semicirculo=new THREE.Mesh(geometry5,material4);
             var cuadrado=new THREE.Mesh(geometry3,material);
@@ -55,6 +53,7 @@
             var esfera=new THREE.Mesh(geometry4,material3);
             var plano=new THREE.Mesh(geometry6,material);
            
+            //posicion de los obejtos
             scene.add(semicirculo);
             scene.add( cylinder );
             scene.add(cuadrado);
@@ -76,7 +75,7 @@
             
             plano.position.y=2;
             plano.rotation.x=90;
-			
+			//posicion camras
 			camera.position.x = 5;
 			camera.position.y = 10;	 
 		  	camera.position.z = 10;
