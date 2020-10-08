@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>editor de figuras
+</title>
+    <style>
+      html, body { margin: 0; padding: 0; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+      <div id="info">Arturo Martinez 6000401
+           juan david solano 6000378
+           Javier Carrillo Vesga 6000361<br/>
+    <script src="js/three.js"></script>
+      <script src="js/dat.gui.min.js"> </script>
+	<script src="js/controls/OrbitControls.js"></script>
+    <script>
+		var scene, aspect, camera, renderer, controls;
+        var radio,alto,densidad,longitud,options;
+        var radio2,tubo,segmentoradial,tubulosegmento;
+            
+        
+	
+		init();
+		animate();
+	
+		function init(){
+			scene = new THREE.Scene();
+			aspect = window.innerWidth / window.innerHeight;
+			camera = new THREE.PerspectiveCamera( 45, aspect, 0.1, 1000);
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			controls = new THREE.OrbitControls( camera, renderer.domElement );			
+			
+			var size = 10;
+			var arrowSize = 1;
+			var divisions = size;
+			var origin = new THREE.Vector3( 0, 0, 0 );
+			var x = new THREE.Vector3( 1, 0, 0 );
+			var y = new THREE.Vector3( 0, 1, 0 );
+		  	var z = new THREE.Vector3( 0, 0, 1 );
+			var color1 = new THREE.Color( 0xFFFFFF );
+		  	var color2 = new THREE.Color( 0x333333 );
+		  	var colorR = new THREE.Color( 0xAA3333 );
+		  	var colorG = new THREE.Color( 0x33AA33 );
+		  	var colorB = new THREE.Color( 0x333366 );
+		  
+		  	//CREAR LAS GRILLAS PARA EL ESCENARIO
+		  	var axesHelper = new THREE.AxesHelper( size );
+		  	var gridHelperXY = new THREE.GridHelper( size, divisions, color1, color1);
+		  	var gridHelperXZ = new THREE.GridHelper( size, divisions, color2, color2 );
+		  	var gridHelperYZ = new THREE.GridHelper( size, divisions, color2, color2 );
+            
+            //ROTARLAS PARA QUE QUEDEN EN EL ESPACIO ADECUADO
+            gridHelperXY.rotateOnWorldAxis ( x, THREE.Math.degToRad(90) );
+            gridHelperXZ.rotateOnWorldAxis ( y, THREE.Math.degToRad(90) );
+            gridHelperYZ.rotateOnWorldAxis ( z, THREE.Math.degToRad(90) );
+            
+            //CREAR LAS FLECHAS QUE INDICAN LOS EJES DE COORDENADAS 3D
+            var arrowX = new THREE.ArrowHelper( x, origin, arrowSize, colorR );
+            var arrowY = new THREE.ArrowHelper( y, origin, arrowSize, colorG );
+            var arrowZ = new THREE.ArrowHelper( z, origin, arrowSize, colorB );
+			
+			//CREAR LAS GEOMETRÍAS
+            var objDatGuiOptions={
+                //cilindro y cubo
+                radio:5,
+                alto:5,
+                densidad:10,
+                longitud:10,
+                //toroide
+                radio2:0.3,
+                tubo:0.08,
+                segmentoradial:32,
+                tubulosegmento:32,
+                options:''
+            }
+           
+            var geometry = new THREE.CylinderGeometry( radio, alto, densidad, longitud );
+            var boxGeometry = new THREE.BoxGeometry( radio, alto, longitud );
+            var torusGeometry = new THREE.TorusGeometry( radio2, tubo,segmentoradial, tubulosegmento );
+            
+            var material = new THREE.MeshBasicMaterial( {color: 0x00A6FF } );
+            var material2 = new THREE.MeshBasicMaterial( {color: 0x3AFF00 } );
+            var material3 = new THREE.MeshBasicMaterial( {color: 0xE000FF } );
+            
+            var cylinder = new THREE.Mesh( geometry, material );
+            var cuadrado = new THREE.Mesh(boxGeometry,material2);
+            var toroide =new THREE.Mesh(torusGeometry,material3);
+            
+            
+            var datGuiSelect=new dat.GUI();
+            var value=new dat.GUI();
+            var ok=new dat.GUI();
+            var radiocomp,altocomp,densidadcomp;
+            var radiocomp3,altocomp2,densidadcomp2;
+            var radiocomp2,tubocomp,segmencomp,tubolocomp;
+		  	var barMenu=datGuiSelect.add(objDatGuiOptions,'options',['toroide','cuadrado','cilindro']).name('figuras').listen();
+            barMenu.onChange(function(value){
+                if(value=='cilindro'){
+                    scene.remove(cuadrado);
+                    scene.remove(toroide);
+                    scene.add(cylinder);
+                    
+                   
+                    
+                    
+                }
+                if(value=='cuadrado'){
+                    scene.remove(cylinder);
+                    scene.remove(toroide);
+                    scene.add(cuadrado);
+                    
+                    
+                    
+                    radiocomp3=ok.add(objDatGuiOptions,'radio',1,5).step(0.001).name('radio').onChange(objDatGuiOptions.radio);
+                    altocomp2=ok.add(objDatGuiOptions,'alto',1,2).step(0.001).name('alto').onChange(objDatGuiOptions.alto);
+                    densidadcomp2=ok.add(objDatGuiOptions,'densidad',0.5,2.9).step(0.001).name('densidad').onChange(objDatGuiOptions.densidad);
+                    
+                }
+                if(value=='toroide'){
+                    scene.add(toroide);
+                    scene.remove(cuadrado);
+                    scene.remove(cylinder);
+                    
+                    
+                    
+                    radiocomp2=ok.add(objDatGuiOptions,'radio',1,5).step(0.001).name('radio').onChange(objDatGuiOptions.radio);
+                    tubocomp=ok.add(objDatGuiOptions,'tubo',1,5).step(0.001).name('tubo').onchange(objDatGuiOptions.tubo);
+                    segmencomp=ok.add(objDatGuiOptions,'segmento',0.05,0.3).step(0.001).name('segmento').onchange(objDatGuiOptions.tubulosegmento);
+                    tubolocomp=ok.add(objDatGuiOptions,'segmento tubo',0.01,0.3).step(0.001).name('segmento tubo').onchange(objDatGuiOptions.tubulosegmento);
+                    
+                }
+               
+            }
+                            )
+            scene.add( gridHelperXZ );
+		  	scene.add( arrowX );	
+		  	scene.add( arrowY );	
+		  	scene.add( arrowZ );	
+			
+			camera.position.x = 5;
+			camera.position.y = 10;	 
+		  	camera.position.z =  10;
+			
+		  	camera.lookAt( origin );
+			}
+    
+    function animate() {
+        render();
+		controls.update();
+        requestAnimationFrame( animate );
+    }
+    
+    function render(){
+        renderer.render( scene, camera );
+    }
+    </script>
+  </body>
+</html>
