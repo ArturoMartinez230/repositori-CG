@@ -31,37 +31,51 @@
 			//CREAR LAS GEOMETRÍAS
             //vertices
             
-            var geometry2 = new THREE.ParametricGeometry( THREE.ParametricGeometries.klein, 25, 25 );
+            const points = [];
+              for (let i = 0; i < 3; ++i) {
+               points.push(new THREE.Vector2(Math.sin(i * 0.2) * 1 + 1, (i - 1) * .8));
+                    }
+               const geometry5 = new THREE.LatheBufferGeometry(points);
+            
+            var geometry2 = new THREE.ConeGeometry( 1, 1, 5 );
             var geometry3 = new THREE.BoxGeometry( 2, 3, 1 );
             var geometry4 = new THREE.SphereGeometry( 0.3, 0.3, 0.3 );
+            var geometry6 = new THREE.CircleGeometry( 1.5, 32 );
 			var geometry = new THREE.CylinderGeometry( 1, 1, 2, 32 );
             
             var material3=new THREE.MeshBasicMaterial({color:0x726E6C});
             var material2=new THREE.MeshBasicMaterial({ color:0x6A503B });
             var material = new THREE.MeshBasicMaterial( {color: 0xE5E5E5 } );
+            var material4 = new THREE.MeshBasicMaterial( {color: 0xD8D0CA } );
             
-            var parametrico = new THREE.Mesh( geometry2, material2 );
+            var cono = new THREE.Mesh( geometry2, material2 );
+            var semicirculo=new THREE.Mesh(geometry5,material4);
             var cuadrado=new THREE.Mesh(geometry3,material);
             var cylinder = new THREE.Mesh( geometry, material );
             var esfera=new THREE.Mesh(geometry4,material3);
+            var plano=new THREE.Mesh(geometry6,material);
            
-            
+            scene.add(semicirculo);
             scene.add( cylinder );
             scene.add(cuadrado);
-            scene.add( parametrico );
+            scene.add( cono );
             scene.add(esfera);
+            scene.add(plano);
             
+            cono.position.y=1;
+            cono.rotation.z=180;
             
-            parametrico.position.y=1;
-            
+            semicirculo.position.y=1;
             
             cuadrado.position.z=-1;
-            cuadrado.position.y=2;
+            cuadrado.position.y=3;
             
             esfera.position.y=3;
             esfera.position.x=-1;
             esfera.position.z=-0.5;
-            	
+            
+            plano.position.y=2;
+            plano.rotation.x=90;
 			
 			camera.position.x = 5;
 			camera.position.y = 10;	 
