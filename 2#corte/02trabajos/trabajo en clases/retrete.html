@@ -9,6 +9,8 @@
   <body>
     <script src="js/three.min.js"></script>
       <script src="js/controls/OrbitControls.js"></script>
+      <script src="js/csg.js"></script>
+	<script src="js/THREE.CSG.js"></script>
     <script>
 		var scene, aspect, camera, renderer,Geometry;
 		var startTime = Date.now();
@@ -26,56 +28,126 @@
             
             controls = new THREE.OrbitControls( camera, renderer.domElement );
             
+             //CREAR ILUMINACIÓN
+            var ambient = new THREE.AmbientLight( 0xffffff, 2 );
+            scene.add( ambient );
+			
+            var pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
+            pointLight.position.set( -5, -2, 5 );
+            scene.add( pointLight );
+			
+            var pointLight = new THREE.PointLight( 0xffffff, .5, 100 );
+            pointLight.position.set( 5, -2, -5 );
+            scene.add( pointLight );
+            
+            //parte de la curva
+            //creamos los tres puntos para hacer la linea
+            var curve2D = [];
+                curve2D[0] = new THREE.Vector2( 0.5, 0 );
+                curve2D[1] = new THREE.Vector2( 1, 2 );
+                curve2D[2] = new THREE.Vector2( 0, 0 );
+				
+			var shape = new THREE.Shape();
+			shape.moveTo(0,0);
+			shape.splineThru(curve2D);
+            
+            var material = new THREE.LineBasicMaterial( { color : 0x684228 } );
+            var resolution = 50;
+            var points2 = shape.getPoints( resolution );
+            var geometry2 = new THREE.BufferGeometry().setFromPoints( points2 );
+            var curveObject = new THREE.Line( geometry, material );
+			var geometry = new THREE.LatheGeometry( points2, 10 );
+			var material= new THREE.MeshStandardMaterial( { 
+				color: 0x684228, 
+				metalness: 0.5, 
+				roughness: 0.1,
+				opacity: 0.75,
+				transparent: true			
+			} );
+            var detalles = new THREE.Mesh( geometry, material );
+			scene.add( detalles );
+			scene.add( curveObject );
+            
+            //parte de los objetos
+            
             //crear la geometria
+            var geometry = new THREE.CylinderGeometry( 1, 1, 2, 32 );
+            var geometry3 = new THREE.BoxGeometry( 2, 4, 1 );
+            var geometry4 = new THREE.SphereGeometry( 0.3, 0.3, 0.3 );
             const points = [];
               for (let i = 0; i < 3; ++i) {
                points.push(new THREE.Vector2(Math.sin(i * 0.2) * 1 + 1, (i - 1) * .8));
                     }
                const geometry5 = new THREE.LatheBufferGeometry(points);
-            
-            var geometry2 = new THREE.ConeGeometry( 1, 1, 5 );
-            var geometry3 = new THREE.BoxGeometry( 2, 3, 1 );
-            var geometry4 = new THREE.SphereGeometry( 0.3, 0.3, 0.3 );
             var geometry6 = new THREE.CircleGeometry( 1.5, 32 );
-			var geometry = new THREE.CylinderGeometry( 1, 1, 2, 32 );
+            var geometry7 = new THREE.CircleGeometry( 0.9, 32 );
+            var geometry8 = new THREE.CylinderGeometry( 0.2, 0.2, 0.8, 32 );
+			
             
             //crear los materiales
-            var material3=new THREE.MeshBasicMaterial({color:0x726E6C});
-            var material2=new THREE.MeshBasicMaterial({ color:0x6A503B });
-            var material = new THREE.MeshBasicMaterial( {color: 0xE5E5E5 } );
-            var material4 = new THREE.MeshBasicMaterial( {color: 0xD8D0CA } );
+            var material = new THREE.MeshStandardMaterial( {color: 0xE5E5E5, metalness: 0.5, roughness: 0.1 } );
+            var material3=new THREE.MeshStandardMaterial({color:0x726E6C,metalness: 0.5, roughness: 0.1 });
+            var material4 = new THREE.MeshStandardMaterial( {color: 0xD8D0CA, metalness: 0.5, roughness: 0.1 } );
+            var material5 = new THREE.MeshStandardMaterial( {color: 0xA7A5A4 , metalness: 0.5, roughness: 0.1 } );
+            var material6 = new THREE.MeshStandardMaterial( {color: 0x684228 , metalness: 0.5, roughness: 0.1 } );
             
-            //creacion del obejto
-            var cono = new THREE.Mesh( geometry2, material2 );
-            var semicirculo=new THREE.Mesh(geometry5,material4);
-            var cuadrado=new THREE.Mesh(geometry3,material);
-            var cylinder = new THREE.Mesh( geometry, material );
-            var esfera=new THREE.Mesh(geometry4,material3);
-            var plano=new THREE.Mesh(geometry6,material);
-           
-            //posicion de los obejtos
-            scene.add(semicirculo);
-            scene.add( cylinder );
+            //creacion de mallas y posicionandolos
+            var cilindro = new THREE.Mesh( geometry );
+            var semirculo=new THREE.Mesh(geometry5);
+            semirculo.translateY(1);
+            
+            var cuadrado=new THREE.Mesh(geometry3);
+            cuadrado.translateY(2);
+            cuadrado.translateZ(-1);
+            var esfera=new THREE.Mesh(geometry4);
+            esfera.translateY(3);
+            esfera.translateZ(-0.5);
+            esfera.translateX(-0.6);
+            
+            var tapa=new THREE.Mesh(geometry7);
+            tapa.translateY(3);
+            tapa.translateZ(-0.4);
+            var desecho=new THREE.Mesh(geometry8);
+            desecho.translateY(1);
+            desecho.rotateX(90);
+
+            //creacion del CSG
+            var cilindroCSG =  THREE.CSG.fromMesh( cilindro );
+			var semicirculoCSG = THREE.CSG.fromMesh( semirculo );
+            
+            var cudardoCSG=THREE.CSG.fromMesh(cuadrado);
+            var esferaCSG=THREE.CSG.fromMesh(esfera);
+            //aplicamos las operaciones
+            var result = cilindroCSG.intersect( semicirculoCSG );	
+            var result2=esferaCSG.intersect(cudardoCSG);
+            
+            //convertimos los resultados
+            var C2T1 = THREE.CSG.toMesh( result );
+            var C2T2=THREE.CSG.toMesh(result2);
+            
+            //convertimos a malla de three js otra ves
+            cilindro.material=material;
+            semirculo.material=material4;
+            C2T1.material=material;
+            
+            cuadrado.material=material;
+            esfera.material=material3;
+            C2T2.material=material3;
+            
+            tapa.material=material5;
+            desecho.material=material6;
+            //agregamos elementos a la escena
+            scene.add(tapa);
+            scene.add(desecho);
+            
+            scene.add(cilindro);
+            scene.add(semirculo);
+            scene.add(C2T1);
+            
             scene.add(cuadrado);
-            scene.add( cono );
             scene.add(esfera);
-            scene.add(plano);
+            scene.add(C2T2);
             
-            cono.position.y=1;
-            cono.rotation.z=180;
-            
-            semicirculo.position.y=1;
-            
-            cuadrado.position.z=-1;
-            cuadrado.position.y=3;
-            
-            esfera.position.y=3;
-            esfera.position.x=-1;
-            esfera.position.z=-0.5;
-            
-            plano.position.y=2;
-            plano.rotation.x=90;
-			//posicion camras
 			camera.position.x = 5;
 			camera.position.y = 10;	 
 		  	camera.position.z = 10;
