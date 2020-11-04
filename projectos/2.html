@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>minecraft</title>
+    <style type="text/css">
+      html, body { margin: 0; padding: 0; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+    <script src="js/three.js"></script>
+	<script src="js/controls/OrbitControls.js"></script>
+    <script src = "js/perlin.js"></script>
+	<script src = "js/PointerLockControls.js"></script>
+	<script src = "js/stats.js"></script>
+      
+    <script type="text/javascript">
+		var scene=new THREE.Scene();
+        var renderer=new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        var camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+        
+        function Block(x,y,z){
+            this.x=x;
+            this.y=y;
+            this.z=z;
+            
+            this.display=function(){
+                var blockbox=new THREE.BoxBufferGeometry(5,5,5);
+                var blockMesh=new THREE.MeshBasicMaterial({color: 0x00ff00});
+                var block=new THREE.Mesh(blockbox,blockMesh);
+                scene.add(block);
+                block.position.x=this.x;
+                block.position.y=this.y - 10;
+                block.position.z=this.z;
+                var edges=new THREE.EdgesGeometry(blockbox);
+                var line=new THREE.LineSegments(edges,new THREE.LineBasicMaterial({color:0xffffff}));
+                scene.add(line);
+                line.position.x=this.x;
+                line.position.y=this.y - 10;
+                line.position.z=this.z;
+            }
+        }
+        var blocks=[];
+        var xoff=0;
+        var zoff=0;
+        var yoff=0;
+        var inc=0.05;
+        var amplitud=50;
+        for(var x=0;x<20;x++){
+            for(var z=0;z<20;z++){
+                var v=Math.round(noise.perlin2(xoff,zoff)*amplitud/5)*5;
+                blocks.push(new Block(x*5,v,z*5));
+                xoff=xoff+inc;
+            }
+            yoff=yoff+inc;
+        }
+        
+        for(var i=0;i<blocks.length;i++){
+            blocks[i].display();
+        }
+        var keys = [];
+        var canJump=true;
+		document.addEventListener("keydown", function(e){
+			keys.push(e.key);
+            if(e.key == " " && canJump == true){
+				ySpeed = -1;
+                canJump = false;
+			}
+			
+		});
+		document.addEventListener("keyup", function(e){
+			var newArr = [];
+			for(var i = 0; i < keys.length; i++){
+				if(keys[i] != e.key){
+					newArr.push(keys[i]);
+				}
+			}
+			keys = newArr;
+		});
+        
+        var controls=new THREE.PointerLockControls(camera,document.body);
+        document.body.addEventListener("click",function(){
+            controls.lock();
+        });
+        controls.addEventListener("lock",function(){
+            
+        });
+        controls.addEventListener("unlock",function(){
+            
+        });
+        
+        var movingSpeed=1.5;
+        var ySpeed=0;
+        var acc=0.08;
+        function update(){
+            if(keys.includes("w")){
+                controls.moveForward(movingSpeed);
+            }
+            if(keys.includes("a")){
+                controls.moveRight(-1 * movingSpeed);
+            }
+            if(keys.includes("s")){
+                controls.moveForward(-1 * movingSpeed);
+            }
+            if(keys.includes("d")){
+                controls.moveRight(-1 * movingSpeed);
+            }
+            camera.position.y = camera.position.y - ySpeed;
+            ySpeed= ySpeed + acc;
+            
+            for(var i=0;i<blocks.length;i++){
+                if(camera.position.x <= blocks[i].x * 5 && camera.position.x >= blocks[i].x && camera.position.z <=blocks[i].z * 5 && camera.position.z >= blocks[i].z){
+                    if(camera.position.y < blocks[i].y){
+                    camera.position.y=blocks[i].y;
+                        ySpeed=0;
+                        canJump=true;
+                        break;
+                  }
+                }
+                
+            }
+            
+        }
+        window.addEventListener("resize",function(){
+            renderer.setSize(window.innerWidth,window.innerHeight);
+            camera.aspect=window.innerWidth/window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+        function render(){
+            renderer.render(scene,camera);
+        }
+        function GameLoop(){
+            requestAnimationFrame(GameLoop);
+            update();
+            render();
+        }
+        GameLoop();
+    </script>
+  </body>
+</html>
