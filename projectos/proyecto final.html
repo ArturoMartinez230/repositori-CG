@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<title> Minecraft</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+	<style type="text/css">
+		body {
+			margin : 0;
+		}
+		#autojumpbutton {
+			position : absolute;
+			left : 20px;
+			top : 20px;
+		}
+	</style>
+</head>
+<body>
+    <div class="cuadros" id="cuadro"></div>
+    <div class="cuadros" id="barrera"></div>
+    <div class="cuadros" id="menu"></div>
+    <div class="cuadros" id="cuadrogrande"></div>
+    <div class= "cuadros"id="block3"></div>
+    <div class= "cuadros" id="block4"></div>
+    <div class= "cuadros" id="block5"></div>
+    <div class= "cuadros" id="block6"></div>
+    <div class= "cuadros" id="block7"></div>
+    <div class= "cuadros" id="block8"></div>
+    
+	<button id = "autojumpbutton" onclick = "toggleAutoJump()"><h2>AutoJump : On</h2></button>
+
+	<script src = "js/three.js"></script>
+	<script src = "js/perlin.js"></script>
+	<script src = "js/PointerLockControls.js"></script>
+	<script src = "js/stats.js"></script>
+    <script src="js/csg.js"></script>
+    <script src="js/THREE.CSG.js"></script>
+ 	<script type="text/javascript">
+
+ 		var stats = new Stats();
+        
+            let plane;
+			let mouse, raycaster, isShiftDown = false,block1 = false,block2 = false;
+            var block3=false,block4=false,block5=false,block6=false,block7=false,block8=false;
+
+			let rollOverMesh, rollOverMaterial;
+			let cubeGeo, cubeMaterial;
+
+			const objects = [];
+        
+        
+        
+ 		stats.showPanel(0); // 0:fps, 1:ms, 2:mb, 3+:custom
+ 		document.body.appendChild(stats.dom);
+
+ 		function animate(){
+ 			stats.begin();
+
+ 			
+
+ 			stats.end();
+
+ 			requestAnimationFrame(animate);
+ 		}
+
+ 		requestAnimationFrame(animate);
+
+ 		noise.seed(Math.random());
+
+ 		var scene = new THREE.Scene();
+ 		scene.background = new THREE.Color(0x00ffff);
+ 		scene.fog = new THREE.Fog(0x000000, 10, 200);
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		document.body.appendChild(renderer.domElement);
+		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        
+         var ambient = new THREE.AmbientLight( 0xffffff, 2 );
+            
+            scene.add( ambient );
+
+            var light = new THREE.HemisphereLight( 0xF4ED10, 0x080820, 2 );
+           
+            light.position.set( 0, 150, -400 );
+            scene.add( light);
+        
+        var ok = new THREE.TextureLoader();
+        
+        var materialArray2 = [
+        
+			new THREE.MeshBasicMaterial({map: ok.load("texture/side94.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side91.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side92.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side92.jpg")}),
+            new THREE.MeshBasicMaterial({map : ok.load("texture/side92.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side93.jpg")}),
+
+		];
+        var materialArray3 = [
+        
+			new THREE.MeshBasicMaterial({map: ok.load("texture/side111.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side111.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side111.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side111.jpg")}),
+            new THREE.MeshBasicMaterial({map : ok.load("texture/side111.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side111.jpg")}),
+
+		];
+        var materialArray4 = [
+        
+			new THREE.MeshBasicMaterial({map: ok.load("texture/side112.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side112.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side112.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side112.jpg")}),
+            new THREE.MeshBasicMaterial({map : ok.load("texture/side112.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side112.jpg")}),
+
+		];
+         var materialArray5 = [
+        
+			new THREE.MeshBasicMaterial({map: ok.load("texture/side113.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side113.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side113.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side113.jpg")}),
+            new THREE.MeshBasicMaterial({map : ok.load("texture/side113.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side113.jpg")}),
+
+		];
+        
+         var materialArray6 = [
+        
+			new THREE.MeshBasicMaterial({map: ok.load("texture/side114.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side114.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side114.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side114.jpg")}),
+            new THREE.MeshBasicMaterial({map : ok.load("texture/side114.jpg")}),
+			new THREE.MeshBasicMaterial({map : ok.load("texture/side114.jpg")}),
+
+		];
+        
+         //árbol_1
+			var boxGeometry = new THREE.BoxGeometry( 22, 2, 2 );
+            
+            var cylinderGeometry = new THREE.CylinderGeometry( 1, 1, 20, 32 );
+            
+			var sphereGeometry = new THREE.SphereGeometry( 0.8, 10, 10 );
+            
+            var sphereGeometry2 = new THREE.SphereGeometry( 3, 10, 10 );
+            
+            var sphereGeometry3 = new THREE.SphereGeometry( 30, 10, 10 );
+            
+			//CREAR LOS MATERIALES
+            var material1 = new THREE.MeshStandardMaterial( { color: 0x342C10, metalness: 0.5, roughness: 0.1 } );
+            
+			var material2 = new THREE.MeshStandardMaterial( { color: 0xF4ED10, metalness: 0.5, roughness: 0.1, transparent:true, opacity: 50  } );
+			var material2 = new THREE.MeshStandardMaterial( { color: 0xF4ED10, metalness: 0.5, roughness: 0.1, transparent:true, opacity: 50  } );
+            
+            var material3 = new THREE.MeshStandardMaterial( { color: 0x1CA032, metalness: 0.5, roughness: 0.1 } );
+            
+            var material4 = new THREE.MeshStandardMaterial( { color: 0xffffff, metalness: 0.5, roughness: 0.1,transparent:true, opacity: 0.9  } );
+            
+            var material5 = new THREE.MeshStandardMaterial( { color: 0x59572A, roughness: 0.6  } );
+            
+			//CREAR LAS MALLAS
+			var cube = new THREE.Mesh( boxGeometry );
+            var sphere = new THREE.Mesh( sphereGeometry );
+            var cylinder = new THREE.Mesh( cylinderGeometry );
+            
+            var cylinder2 = cylinder.clone();
+            var cylinder3 = cylinder.clone();
+            var cylinder4 = cylinder.clone();
+            var cylinder5 = cylinder.clone();
+            
+            cylinder.translateX( -50 );
+            cylinder.translateZ( 20 );
+            cylinder.rotateX( 1.57 ); 
+            
+            cylinder2.translateX( -50 ).translateZ( 20 ).translateY( 2 );
+            cylinder2.rotateX( 1.57 );
+            
+            cylinder3.translateX( -50 ).translateZ( 20 ).translateY( 4 );
+            cylinder3.rotateX( 1.57 );
+            
+            cylinder4.translateX( -50 ).translateZ( 20 ).translateY( 6 );
+            cylinder4.rotateX( 1.57 );
+            
+            var sphere11 = new THREE.Mesh( sphereGeometry2 );
+            var sphere12 = sphere11.clone();
+            var sphere13 = sphere11.clone();
+            var sphere14 = sphere11.clone();
+            
+            var sphere2 = sphere.clone();
+            var sphere3 = sphere.clone();
+            var sphere4 = sphere.clone();
+            var sphere5 = sphere.clone();
+            var sphere6 = sphere.clone();
+            
+            var sphere15 = new THREE.Mesh( sphereGeometry3 );
+            sphere15.translateZ( -400 ).translateY(150);
+            
+            sphere11.translateX( -3 );
+            sphere12.translateX( 0 );
+            sphere13.translateX( 3 );
+            sphere14.translateY( 1.5 );
+            sphere14.translateX( 0 );
+            
+            sphere2.translateY( 2.6 );
+            sphere2.translateZ( 0.5 );
+            
+            sphere3.translateY( 2.2 );
+            sphere3.translateX( -0.8 );
+            
+            sphere4.translateY( 3.2 );
+            sphere4.translateZ( -0.5 );
+            
+            sphere5.translateY( 3.2 );
+            sphere5.translateX( 0.5 );
+            
+            sphere6.translateY( 2.5 );
+            sphere6.translateX( 0.5 );
+            
+            var cube2 = cube.clone();
+            var cube3 = cube.clone();
+            var cube4 = cube.clone();
+            var cube5 = cube.clone();
+            var cube6 = cube.clone();
+            var cube7 = cube.clone();
+            var cube8 = cube.clone();
+            var cube9 = cube.clone(); 
+			var cube10 = cube.clone();
+            
+            
+            cube.translateY( 6 );
+			sphere.translateY( 3 );
+            cube.rotateZ( THREE.Math.degToRad(90) );
+            
+            cube2.translateY( 3 );
+            cube2.translateZ( 50 );
+            cube2.translateX( 8 );
+            cube2.rotateZ( THREE.Math.degToRad(90) );
+            
+            cube3.translateY( 3 );
+            cube3.translateZ( 20 );
+            cube3.translateX( 40 );
+            cube3.rotateZ( THREE.Math.degToRad(90) );
+            
+            cube4.translateY( 3 );
+            cube4.translateZ( 90 );
+            cube4.translateX( 19 );
+            cube4.rotateZ( THREE.Math.degToRad(90) );
+            
+            cube5.translateY( 3 );
+            cube5.translateZ( -71 );
+            cube5.translateX( -42 );
+            cube5.rotateZ( THREE.Math.degToRad(90) );
+            
+            cube6.translateY( 3 );
+            cube6.translateX( -140 );
+            cube6.rotateZ( THREE.Math.degToRad(90) );
+            
+            cube7.translateY( 3 );
+            cube7.translateX( -26 );
+            cube7.translateZ( -14 );
+            cube7.rotateZ( THREE.Math.degToRad(90) );
+            
+            cube8.translateY( 3 );
+            cube8.translateX( 58 );
+            cube8.translateZ( -150 );
+            cube8.rotateZ( THREE.Math.degToRad(90) );
+            
+            cube9.translateY( 3 );
+            cube9.translateX( 60 );
+            cube9.rotateZ( THREE.Math.degToRad(90) );
+            
+            cube10.translateY( 3 );
+            cube10.translateZ( -70 );
+            cube10.rotateZ( THREE.Math.degToRad(90) );
+            
+            //CONVERTIR A CSG
+			var sphereCSG = THREE.CSG.fromMesh( sphere );
+            var sphere2CSG = THREE.CSG.fromMesh( sphere2 );
+			var sphere3CSG = THREE.CSG.fromMesh( sphere3 );
+            var sphere4CSG = THREE.CSG.fromMesh( sphere4 );
+            var sphere5CSG = THREE.CSG.fromMesh( sphere5 );
+            var sphere6CSG = THREE.CSG.fromMesh( sphere6 );
+            var sphere11CSG = THREE.CSG.fromMesh( sphere11 );
+			var sphere12CSG = THREE.CSG.fromMesh( sphere13 );
+            var sphere13CSG = THREE.CSG.fromMesh( sphere14 );
+            var sphere14CSG = THREE.CSG.fromMesh( sphere12 );
+            
+            var cylinderCSG = THREE.CSG.fromMesh( cylinder );
+            var cylinder2CSG = THREE.CSG.fromMesh( cylinder2 );
+            var cylinder3CSG = THREE.CSG.fromMesh( cylinder3 );
+            var cylinder4CSG = THREE.CSG.fromMesh( cylinder4 );
+            
+			//APLICAR LAS OPERACIONES
+			var result1 = sphereCSG.union( sphere2CSG ).union( sphere3CSG ).union( sphere4CSG ).union( sphere5CSG ).union( sphere6CSG );	//CAJA MENOS ESFERA
+            
+            var result2 = sphere11CSG.union( sphere12CSG ).union( sphere13CSG ).union( sphere14CSG ); 
+            
+            var result3 = cylinderCSG.union(cylinder2CSG).union(cylinder3CSG).union(cylinder4CSG);
+            
+			//CONVERTIR A MALLA DE THREE JS NUEVAMENTE
+			var C2T1 = THREE.CSG.toMesh( result1 );
+            var C2T2 = THREE.CSG.toMesh( result1 );
+            var C2T3 = THREE.CSG.toMesh( result1 );
+            var C2T4 = THREE.CSG.toMesh( result1 );
+            var C2T5 = THREE.CSG.toMesh( result1 );
+            var C2T6 = THREE.CSG.toMesh( result1 );
+            var C2T7 = THREE.CSG.toMesh( result1 );
+            var C2T8 = THREE.CSG.toMesh( result1 );
+            var C2T9 = THREE.CSG.toMesh( result1 );
+            var C2T10 = THREE.CSG.toMesh( result1 );
+            
+            var C2T11 = THREE.CSG.toMesh( result2 );
+            var C2T12 = THREE.CSG.toMesh( result2 );
+            var C2T13 = THREE.CSG.toMesh( result2 );
+            var C2T14 = THREE.CSG.toMesh( result2 );
+            
+            var C2T15 = THREE.CSG.toMesh( result3 );
+            var C2T16 = THREE.CSG.toMesh( result3 );
+            var C2T17 = THREE.CSG.toMesh( result3 );
+            
+            var C2T18 = THREE.CSG.toMesh( result3 );
+            var C2T19 = THREE.CSG.toMesh( result3 );
+            var C2T20 = THREE.CSG.toMesh( result3 );
+            var C2T21 = THREE.CSG.toMesh( result3 );
+            
+            C2T11.name = 'C2T11';
+            C2T12.name = 'C2T12';
+            C2T13.name = 'C2T13';
+            C2T14.name = 'C2T14';
+            
+            xScale = 4;
+            C2T1.scale.x = C2T1.scale.y = C2T1.scale.z = xScale;
+            
+            xScale = 4;
+            C2T2.scale.x = C2T2.scale.y = C2T2.scale.z = xScale;
+            C2T2.translateY( 2 );
+            C2T2.translateZ( 50 );
+            C2T2.translateX( 8 );
+            
+            xScale = 4;
+            C2T3.scale.x = C2T3.scale.y = C2T3.scale.z = xScale;
+            C2T3.translateY( 1 );
+            C2T3.translateZ( 20 );
+            C2T3.translateX( 40 );
+            
+            xScale = 4;
+            C2T4.scale.x = C2T4.scale.y = C2T4.scale.z = xScale;
+            C2T4.translateY( -1 );
+            C2T4.translateZ( 90 );
+            C2T4.translateX( 19 );
+            
+            xScale = 4;
+            C2T5.scale.x = C2T5.scale.y = C2T5.scale.z = xScale;
+            C2T5.translateY( -1.2 );
+            C2T5.translateZ( -71 );
+            C2T5.translateX( -42 );
+ 
+            xScale = 4;
+            C2T6.scale.x = C2T6.scale.y = C2T6.scale.z = xScale;
+            C2T6.translateY( 1.5 );
+            C2T6.translateX( -140 );
+            
+            xScale = 4;
+            C2T7.scale.x = C2T7.scale.y = C2T7.scale.z = xScale;
+            C2T7.translateY( -0.56 );
+            C2T7.translateZ( -14);
+            C2T7.translateX( -26 );
+            
+            xScale = 4;
+            C2T8.scale.x = C2T8.scale.y = C2T8.scale.z = xScale;
+            C2T8.translateY( 0 );
+            C2T8.translateX( 58 );
+            C2T8.translateZ( -150 );
+            
+            xScale = 4;
+            C2T9.scale.x = C2T9.scale.y = C2T9.scale.z = xScale;
+            C2T9.translateY( 2 );
+            C2T9.translateX( 60 );
+            
+            xScale = 4;
+            C2T10.scale.x = C2T10.scale.y = C2T10.scale.z = xScale;
+            C2T10.translateY( -0.8 );
+            C2T10.translateZ( -70 );
+            
+
+            xScale = 3;
+            C2T11.scale.x = C2T11.scale.y = C2T11.scale.z = xScale;
+            C2T11.translateX( -100 ).translateX( 100 ).translateY( 60 ).translateZ( 100 );
+            
+            xScale = 3;
+            C2T12.scale.x = C2T12.scale.y = C2T12.scale.z = xScale;
+            C2T12.translateY( 50 );
+            C2T12.translateX( -140 );
+            C2T12.rotateY(90);
+            
+            xScale = 3;
+            C2T13.scale.x = C2T13.scale.y = C2T13.scale.z = xScale;
+            C2T13.translateY( 70 );
+            C2T13.translateX( 150 );
+            C2T13.rotateY(90);
+            
+            xScale = 3;
+            C2T14.scale.x = C2T14.scale.y = C2T14.scale.z = xScale;
+            C2T14.translateY( 50 );
+            C2T14.translateZ( -150 );
+            
+            C2T16.rotateY(1.57);
+            C2T16.translateX( 20 ).translateZ( -59 ).translateY( 0 );
+            
+            C2T17.rotateY(1.57);
+            C2T17.translateX( 40 ).translateZ( -59 ).translateY( 0 );
+            
+            C2T18.rotateX(1).rotateY(1.57);
+            C2T18.translateX( 51 ).translateZ( -59 ).translateY( 18 );
+            
+            C2T19.rotateX(1).rotateY(1.57);
+            C2T19.translateX( 51 ).translateZ( -59 ).translateY( 10 );
+            
+            C2T20.rotateX(-1).rotateY(-1.57);
+            C2T20.translateX( 73 ).translateZ( 19 ).translateY( -16 );
+            
+            C2T21.rotateX(-1).rotateY(-1.57);
+            C2T21.translateX( 73 ).translateZ( 19 ).translateY( -24 );
+            
+            //Material
+			cube.material = materialArray2;
+            cube2.material = materialArray2;
+            cube3.material = materialArray2;
+            cube4.material = materialArray2;
+            cube5.material = materialArray2;
+            cube6.material = materialArray2;
+            cube7.material = materialArray2;
+            cube8.material = materialArray2;
+            cube9.material = materialArray2;
+            cube10.material = materialArray2;
+            
+            sphere15.material = material2;
+            
+			C2T1.material = materialArray4;
+            C2T2.material = materialArray4;
+            C2T3.material = materialArray4;
+            C2T4.material = materialArray4;
+            C2T5.material = materialArray4;
+            C2T6.material = materialArray4;
+            C2T7.material = materialArray4;
+            C2T8.material = materialArray4;
+            C2T9.material = materialArray4;
+            C2T10.material = materialArray4;
+            
+            C2T11.material = materialArray3;
+            C2T12.material = materialArray3;
+            C2T13.material = materialArray3;
+            C2T14.material = materialArray3;
+                
+            C2T15.material = materialArray5;
+            C2T16.material = materialArray5;
+            C2T17.material = materialArray5;
+            C2T18.material = materialArray5;
+            C2T19.material = materialArray5;
+            C2T20.material = materialArray5;
+            C2T21.material = materialArray5;
+            
+			//AGREGAR A LA ESCENA LOS DIFERENTES ELEMENTOS
+			scene.add( cube );
+			scene.add( C2T1 );
+            scene.add( C2T2 );
+            scene.add( C2T3 );
+            scene.add( C2T4 );
+            scene.add( C2T5 );
+            scene.add( C2T6 );
+            scene.add( C2T7 );
+            scene.add( C2T8 );
+            scene.add( C2T9 );
+            scene.add( C2T10 );
+            
+            scene.add( sphere15 );
+            
+            scene.add(cube2);
+            scene.add(cube3);
+            scene.add(cube4);
+            scene.add(cube5);
+            scene.add(cube6);
+            scene.add(cube7);
+            scene.add(cube8);
+            scene.add(cube9);
+            scene.add(cube10);
+          
+            scene.add( C2T11 );
+            scene.add( C2T12 );
+            scene.add( C2T13 );
+            scene.add( C2T14 );
+            
+            scene.add( C2T15 );
+            scene.add( C2T16 );
+            scene.add( C2T17 );
+            scene.add( C2T18 );
+            scene.add( C2T19 );
+            scene.add( C2T20 );
+            scene.add( C2T21 );
+        
+        
+
+	// esta parte del codigo fue sacada de un video de youtube : https://www.youtube.com/watch?v=eMNdWrx4OPg&list=WL&index=4&ab_channel=HritikRC	
+
+		var autoJump = true;
+		function toggleAutoJump(){
+			if(autoJump == true){
+				autoJump = false;
+				document.getElementById("autojumpbutton").innerHTML = "<h2>AutoJump : Off</h2>";
+			} else {
+				autoJump = true;
+				document.getElementById("autojumpbutton").innerHTML = "<h2>AutoJump : On</h2>";
+			}
+		}
+		
+		var loader = new THREE.TextureLoader();
+		var materialArray = [
+        
+			new THREE.MeshBasicMaterial({map: loader.load("texture/side34.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side31.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/top3.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/bottom3.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side32.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side33.jpg")}),
+
+		];
+        
+        var cubeMaterial1 = [
+        
+			new THREE.MeshBasicMaterial({map: loader.load("texture/side34.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side31.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/top3.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/bottom3.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side32.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side33.jpg")}),
+
+		];
+        
+        var cubeMaterial2 = [
+        
+			new THREE.MeshBasicMaterial({map: loader.load("texture/side84.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side81.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/top8.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/bottom8.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side82.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side83.jpg")}),
+
+		];
+        
+        var cubeMaterial3 = [
+        
+			new THREE.MeshBasicMaterial({map: loader.load("texture/side44.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side41.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/top4.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/bottom4.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side42.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side43.jpg")}),
+
+		];
+        var cubeMaterial4 = [
+        
+			new THREE.MeshBasicMaterial({map: loader.load("texture/side54.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side51.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/top5.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/bottom5.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side52.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side53.jpg")}),
+
+		];
+        
+        var cubeMaterial5 = [
+        
+			new THREE.MeshBasicMaterial({map: loader.load("texture/side64.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side61.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/top6.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/bottom6.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side62.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side63.jpg")}),
+
+		];
+        var cubeMaterial6 = [
+        
+			new THREE.MeshBasicMaterial({map: loader.load("texture/side74.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side71.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/top7.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/bottom7.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side72.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side73.jpg")}),
+
+		];
+         var cubeMaterial7 = [
+        
+			new THREE.MeshBasicMaterial({map: loader.load("texture/side94.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side91.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/top9.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/bottom9.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side92.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side93.jpg")}),
+
+		];
+         var cubeMaterial8 = [
+        
+			new THREE.MeshBasicMaterial({map: loader.load("texture/side104.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side101.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/top10.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/bottom10.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side102.jpg")}),
+			new THREE.MeshBasicMaterial({map : loader.load("texture/side103.jpg")}),
+
+		];
+        
+		var faces = [
+			{ // left
+			    dir: [ -5,  0,  0, "left"],
+			},
+			{ // right
+			    dir: [  5,  0,  0, "right"],
+			},
+			{ // bottom
+			    dir: [  0, -5,  0, "bottom"],
+			},
+			{ // top
+			    dir: [  0,  5,  0, "top"],
+			},
+			{ // back
+			    dir: [  0,  0, -5, "back"],
+			},
+			{ // front
+			    dir: [  0,  0,  5, "front"],
+			},
+		];
+
+		function Block(x, y, z){
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			this.mesh;
+			this.line;
+
+			this.getVoxel = function(x, y, z){
+				for(var i = 0; i < chunks.length; i++){
+					for(var j = 0; j < chunks[i].length; j++){
+						if(chunks[i][j].x == x && chunks[i][j].y == y && chunks[i][j].z == z){
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+
+			this.directions = [];
+			this.adjustFaces = function(){
+				for (const {dir} of faces) {
+	                const neighbour = this.getVoxel(
+	                    this.x + dir[0],
+	                    this.y + dir[1],
+	                    this.z + dir[2]
+	                );
+	                if(neighbour){
+	                	switch(dir[3]){
+	                		case "right":
+	                			this.directions.push("right");
+	                			break;
+	                		case "left":
+	                			this.directions.push("left");
+	                			break;
+	                		case "bottom":
+	                			this.directions.push("bottom");
+	                			break;
+	                		case "top":
+	                			this.directions.push("top");
+	                			break;
+	                		case "back":
+	                			this.directions.push("back");
+	                			break;
+	                		case "front":
+	                			this.directions.push("front");
+	                			break;
+	                	}
+	                }
+	            }
+			}
+
+			this.display = function(){
+				this.adjustFaces();
+
+				var blockBox = new THREE.BoxBufferGeometry(5, 5, 5); 
+				this.mesh = new THREE.Mesh(blockBox, [
+					(this.directions.includes("right") ? null : materialArray[0]), // right
+					(this.directions.includes("left") ? null : materialArray[1]), // left
+					(this.directions.includes("top") ? null : materialArray[2]), // top
+					(this.directions.includes("bottom") ? null : materialArray[3]), // bottom
+					(this.directions.includes("front") ? null : materialArray[4]), // front
+					(this.directions.includes("back") ? null : materialArray[5]), // back
+				]);
+				scene.add(this.mesh);
+				this.mesh.position.x = this.x;
+				this.mesh.position.y = this.y - 10;
+				this.mesh.position.z = this.z;
+
+				var edges = new THREE.EdgesGeometry(blockBox);
+				this.line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color : 0x000000, linewidth : 4}));
+				scene.add(this.line);
+				this.line.position.x = this.x;
+				this.line.position.y = this.y - 10;
+				this.line.position.z = this.z;
+			}
+		}
+
+
+		var chunks = [];
+		var xoff = 0;
+		var zoff = 0;
+		var inc = 0.05;
+		var amplitude = 10 ;
+		var renderDistance = 5;
+		var chunkSize = 10;
+		camera.position.x = renderDistance * chunkSize / 2 * 5;
+		camera.position.z = renderDistance * chunkSize / 2 * 5;
+		camera.position.y = 50;
+		for(var i = 0; i < renderDistance; i++){
+			for(j = 0; j < renderDistance; j++){
+				var chunk = [];
+				for(var x = i * chunkSize; x < (i * chunkSize) + chunkSize; x++){
+					for(var z = j * chunkSize; z < (j * chunkSize) + chunkSize; z++){
+						xoff = inc * x;
+						zoff = inc * z;
+						var v = Math.round(noise.perlin2(xoff, zoff) * amplitude / 5) * 5;
+						chunk.push(new Block(x * 5, v, z * 5));
+					}
+				}
+				chunks.push(chunk);
+			}
+		}
+
+		for(var i = 0; i < chunks.length; i++){
+			for(var j = 0; j < chunks[i].length; j++){
+				chunks[i][j].display();
+			}
+		}
+
+		var keys = [];
+		var canJump = true;
+		document.addEventListener("keydown", function(e){
+			keys.push(e.key);
+			if(e.key == " " && canJump == true){
+				ySpeed = -1.3;
+				canJump = false;
+			}
+		});
+		document.addEventListener("keyup", function(e){
+			var newArr = [];
+			for(var i = 0; i < keys.length; i++){
+				if(keys[i] != e.key){
+					newArr.push(keys[i]);
+				}
+			}
+			keys = newArr;
+		});
+
+		var controls = new THREE.PointerLockControls(camera, document.body);
+		document.body.addEventListener("click", function(){
+			controls.lock();
+		});
+		controls.addEventListener("lock", function(){
+
+		});
+		controls.addEventListener("unlock", function(){
+
+		});
+
+		var movingSpeed = 0.7;
+		var ySpeed = 0;
+		var acc = 0.08;
+		function update(){
+			if(keys.includes("w")){
+				controls.moveForward(movingSpeed);
+				if(autoJump == false){
+					for(var i = 0; i < chunks.length; i++){
+						for(var j = 0; j < chunks[i].length; j++){
+							if(camera.position.x <= chunks[i][j].x + 2.5 && camera.position.x >= chunks[i][j].x - 2.5 && camera.position.z <= chunks[i][j].z + 2.5 && camera.position.z >= chunks[i][j].z - 2.5){
+								if(camera.position.y == chunks[i][j].y - 2.5){
+									controls.moveForward(-1 * movingSpeed);
+								}
+							}
+						}
+					}
+				}
+			}
+			if(keys.includes("a")){
+				controls.moveRight(-1 * movingSpeed);
+				if(autoJump == false){
+					for(var i = 0; i < chunks.length; i++){
+						for(var j = 0; j < chunks[i].length; j++){
+							if(camera.position.x <= chunks[i][j].x + 2.5 && camera.position.x >= chunks[i][j].x - 2.5 && camera.position.z <= chunks[i][j].z + 2.5 && camera.position.z >= chunks[i][j].z - 2.5){
+								if(camera.position.y == chunks[i][j].y - 2.5){
+									controls.moveRight(movingSpeed);
+								}
+							}
+						}
+					}
+				}
+			}
+			if(keys.includes("s")){
+				controls.moveForward(-1 * movingSpeed);
+				if(autoJump == false){
+					for(var i = 0; i < chunks.length; i++){
+						for(var j = 0; j < chunks[i].length; j++){
+							if(camera.position.x <= chunks[i][j].x + 2.5 && camera.position.x >= chunks[i][j].x - 2.5 && camera.position.z <= chunks[i][j].z + 2.5 && camera.position.z >= chunks[i][j].z - 2.5){
+								if(camera.position.y == chunks[i][j].y - 2.5){
+									controls.moveForward(movingSpeed);
+								}
+							}
+						}
+					}
+				}
+			}
+			if(keys.includes("d")){
+				controls.moveRight(movingSpeed);
+				if(autoJump == false){
+					for(var i = 0; i < chunks.length; i++){
+						for(var j = 0; j < chunks[i].length; j++){
+							if(camera.position.x <= chunks[i][j].x + 2.5 && camera.position.x >= chunks[i][j].x - 2.5 && camera.position.z <= chunks[i][j].z + 2.5 && camera.position.z >= chunks[i][j].z - 2.5){
+								if(camera.position.y == chunks[i][j].y - 2.5){
+									controls.moveRight(-1 * movingSpeed);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			camera.position.y = camera.position.y - ySpeed;
+			ySpeed = ySpeed + acc;
+
+			for(var i = 0; i < chunks.length; i++){
+				for(var j = 0; j < chunks[i].length; j++){
+					if(camera.position.x <= chunks[i][j].x + 2.5 && camera.position.x >= chunks[i][j].x - 2.5 && camera.position.z <= chunks[i][j].z + 2.5 && camera.position.z >= chunks[i][j].z - 2.5){
+						if(camera.position.y <= chunks[i][j].y + 2.5 && camera.position.y >= chunks[i][j].y - 2.5){
+							camera.position.y = chunks[i][j].y + 2.5;
+							ySpeed = 0;
+							canJump = true;
+							break;
+						}
+					}
+				}
+			}
+
+			if(camera.position.z <= lowestZBlock() + 20){ // 20 is 4 blocks
+				/*
+					
+					[0], [3], [6],
+					[1], [x], [7],
+					[2], [5], [8],
+				*/
+
+				// remove blocks (chunks)
+				for(var i = 0; i < chunks.length; i++){
+					if((i + 1) % renderDistance == 0){
+						for(var j = 0; j < chunks[i].length; j++){
+							scene.remove(chunks[i][j].mesh);
+							scene.remove(chunks[i][j].line);
+						}
+					}
+				}
+				var newChunks = [];
+				for(var i = 0; i < chunks.length; i++){
+					if((i + 1) % renderDistance != 0){
+						newChunks.push(chunks[i]);
+					}
+				}
+
+				// add blocks
+				var lowestX = lowestXBlock();
+				var lowestZ = lowestZBlock();
+				for(var i = 0; i < renderDistance; i++){
+					var chunk = [];
+					for(var x = lowestX + (i * chunkSize * 5); x < lowestX + (i * chunkSize * 5) + (chunkSize * 5); x = x + 5){
+						for(var z = lowestZ - (chunkSize * 5); z < lowestZ; z = z + 5){
+							xoff = inc * x / 5;
+							zoff = inc * z / 5;
+							var v = Math.round(noise.perlin2(xoff, zoff) * amplitude / 5) * 5;
+							chunk.push(new Block(x, v, z));
+						}
+					}
+					newChunks.splice(i * renderDistance, 0, chunk);
+				}
+
+				chunks = newChunks;
+
+				for(var i = 0; i < chunks.length - renderDistance + 1; i = i + renderDistance){
+					for(var j = 0; j < chunks[i].length; j++){
+						chunks[i][j].display();
+					}
+				}
+			}
+
+			if(camera.position.z >= highestZBlock() - 20){ // 20 is 4 blocks
+				/*
+					
+					[0], [3], [6],
+					[1], [x], [7],
+					[2], [5], [8],
+				*/
+
+				// remove blocks (chunks)
+				for(var i = 0; i < chunks.length; i++){
+					if(i % renderDistance == 0){
+						for(var j = 0; j < chunks[i].length; j++){
+							scene.remove(chunks[i][j].mesh);
+							scene.remove(chunks[i][j].line);
+						}
+					}
+				}
+				var newChunks = [];
+				for(var i = 0; i < chunks.length; i++){
+					if(i % renderDistance != 0){
+						newChunks.push(chunks[i]);
+					}
+				}
+
+				// add blocks
+				var lowestX = lowestXBlock();
+				var highestZ = highestZBlock();
+				for(var i = 0; i < renderDistance; i++){
+					var chunk = [];
+					for(var x = lowestX + (i * chunkSize * 5); x < lowestX + (i * chunkSize * 5) + (chunkSize * 5); x = x + 5){
+						for(var z = highestZ + 5; z < (highestZ + 5) + (chunkSize * 5); z = z + 5){
+							xoff = inc * x / 5;
+							zoff = inc * z / 5;
+							var v = Math.round(noise.perlin2(xoff, zoff) * amplitude / 5) * 5;
+							chunk.push(new Block(x, v, z));
+						}
+					}
+					newChunks.splice((i * renderDistance) + 2, 0, chunk);
+				}
+
+				chunks = newChunks;
+
+				for(var i = renderDistance - 1; i < chunks.length; i = i + renderDistance){
+					for(var j = 0; j < chunks[i].length; j++){
+						chunks[i][j].display();
+					}
+				}
+			}
+
+			if(camera.position.x >= highestXBlock() - 20){ // 20 is 4 blocks
+				/*
+					
+					[0], [3], [6],
+					[1], [x], [7],
+					[2], [5], [8],
+				*/
+
+				// remove blocks (chunks)
+				for(var i = 0; i < renderDistance; i++){
+					for(var j = 0; j < chunks[i].length; j++){
+						scene.remove(chunks[i][j].mesh);
+						scene.remove(chunks[i][j].line);
+					}
+				}
+				var newChunks = [];
+				for(var i = renderDistance; i < chunks.length; i++){
+					newChunks.push(chunks[i]);
+				}
+
+				// add blocks
+				var highestX = highestXBlock();
+				var lowestZ = lowestZBlock();
+				for(var i = 0; i < renderDistance; i++){
+					var chunk = [];
+					for(var z = lowestZ + (i * chunkSize * 5); z < lowestZ + (i * chunkSize * 5) + (chunkSize * 5); z = z + 5){
+						for(var x = highestX + 5; x < highestX + 5 + (chunkSize * 5); x = x + 5){
+							xoff = inc * x / 5;
+							zoff = inc * z / 5;
+							var v = Math.round(noise.perlin2(xoff, zoff) * amplitude / 5) * 5;
+							chunk.push(new Block(x, v, z));
+						}
+					}
+					newChunks.splice(chunks.length - (renderDistance - i), 0, chunk);
+				}
+
+				chunks = newChunks;
+
+				for(var i = chunks.length - renderDistance; i < chunks.length; i++){
+					for(var j = 0; j < chunks[i].length; j++){
+						chunks[i][j].display();
+					}
+				}
+			}
+
+			if(camera.position.x <= lowestXBlock() + 20){ // 20 is 4 blocks
+				/*
+					
+					[0], [3], [6],
+					[1], [x], [7],
+					[2], [5], [8],
+				*/
+
+				// remove blocks (chunks)
+				for(var i = chunks.length - renderDistance; i < chunks.length; i++){
+					for(var j = 0; j < chunks[i].length; j++){
+						scene.remove(chunks[i][j].mesh);
+						scene.remove(chunks[i][j].line);
+					}
+				}
+				var newChunks = [];
+				for(var i = 0; i < chunks.length - renderDistance; i++){
+					newChunks.push(chunks[i]);
+				}
+
+				// add blocks
+				var lowestX = lowestXBlock();
+				var lowestZ = lowestZBlock();
+				for(var i = 0; i < renderDistance; i++){
+					var chunk = [];
+					for(var z = lowestZ + (i * chunkSize * 5); z < lowestZ + (i * chunkSize * 5) + (chunkSize * 5); z = z + 5){
+						for(var x = lowestX - (chunkSize * 5); x < lowestX; x = x + 5){
+							xoff = inc * x / 5;
+							zoff = inc * z / 5;
+							var v = Math.round(noise.perlin2(xoff, zoff) * amplitude / 5) * 5;
+							chunk.push(new Block(x, v, z));
+						}
+					}
+					newChunks.splice(i, 0, chunk);
+				}
+
+				chunks = newChunks;
+
+				for(var i = 0; i < renderDistance; i++){
+					for(var j = 0; j < chunks[i].length; j++){
+						chunks[i][j].display();
+					}
+				}
+			}
+		}
+
+		function lowestXBlock(){
+			var xPosArray = [];
+			for(var i = 0; i < chunks.length; i++){
+				for(var j = 0; j < chunks[i].length; j++){
+					xPosArray.push(chunks[i][j].x);
+				}
+			}
+			return Math.min.apply(null, xPosArray);
+		}
+
+		function highestXBlock(){
+			var xPosArray = [];
+			for(var i = 0; i < chunks.length; i++){
+				for(var j = 0; j < chunks[i].length; j++){
+					xPosArray.push(chunks[i][j].x);
+				}
+			}
+			return Math.max.apply(null, xPosArray);
+		}
+
+		function lowestZBlock(){
+			var zPosArray = [];
+			for(var i = 0; i < chunks.length; i++){
+				for(var j = 0; j < chunks[i].length; j++){
+					zPosArray.push(chunks[i][j].z);
+				}
+			}
+			return Math.min.apply(null, zPosArray);
+		}
+
+		function highestZBlock(){
+			var zPosArray = [];
+			for(var i = 0; i < chunks.length; i++){
+				for(var j = 0; j < chunks[i].length; j++){
+					zPosArray.push(chunks[i][j].z);
+				}
+			}
+			return Math.max.apply(null, zPosArray);
+		}
+        
+        
+        // parte sacado de un ejemplo de la pagina principal de three.js para colocar objetos al escenario : https://threejs.org/examples/#webgl_interactive_voxelpainter
+        
+                 // roll-over helpers
+
+				const rollOverGeo = new THREE.BoxBufferGeometry( 5, 5, 5 );
+				rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.5, transparent: true } );
+				rollOverMesh = new THREE.Mesh( rollOverGeo, rollOverMaterial );
+				scene.add( rollOverMesh );
+
+				// cubes
+
+				cubeGeo = new THREE.BoxBufferGeometry( 5, 5, 5 );
+                var geometry3 = new THREE.ConeGeometry( 5, 8, 4 );
+                var geometry2= new THREE.CylinderGeometry(5,5,10,8);
+				
+				raycaster = new THREE.Raycaster();
+				mouse = new THREE.Vector2();
+
+				const geometry = new THREE.PlaneBufferGeometry( 1000, 1000 );
+				geometry.rotateX( - Math.PI / 2 );
+
+				plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { visible: false } ) );
+				scene.add( plane );
+                plane.position.y=-10;
+
+				objects.push( plane );
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+                document.addEventListener( 'keydown', onDocumentKeyDown, false );
+				document.addEventListener( 'keyup', onDocumentKeyUp, false );  
+
+			function onDocumentMouseMove( event ) {
+
+				event.preventDefault();
+
+				mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
+
+				raycaster.setFromCamera( mouse, camera );
+
+				var intersects = raycaster.intersectObjects( objects );
+
+				if ( intersects.length > 0 ) {
+
+					var intersect = intersects[ 0 ];
+
+					rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );
+					rollOverMesh.position.divideScalar( 5 ).floor().multiplyScalar( 5 ).addScalar( 5 );
+
+				}
+
+				render();
+
+			}
+
+			function onDocumentMouseDown( event ) {
+
+				event.preventDefault();
+
+				mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
+
+				raycaster.setFromCamera( mouse, camera );
+
+				var intersects = raycaster.intersectObjects( objects );
+
+				if ( intersects.length > 0 ) {
+
+					var intersect = intersects[ 0 ];
+
+					// delete cube
+
+					if ( isShiftDown ) {
+
+						if ( intersect.object !== plane ) {
+
+							scene.remove( intersect.object );
+
+							objects.splice( objects.indexOf( intersect.object ), 1 );
+
+						}
+
+						// create cube
+					} else {
+
+						if(block1) {
+                        
+                        
+                        var voxel = new THREE.Mesh( cubeGeo, cubeMaterial1 );
+                        cuadrado  = document.getElementById("barrera");
+                        cuadrado.style.left="550"+"px";
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+				        voxel.position.divideScalar( 5 ).floor().multiplyScalar( 5 ).addScalar( 5 ); 
+                       
+						scene.add( voxel );
+						objects.push( voxel );
+                       
+		                   }if(block2){
+                         cuadrado= document.getElementById("barrera");
+                         cuadrado.style.left="500"+"px"; 
+                         
+                        var voxel = new THREE.Mesh( cubeGeo, cubeMaterial2 );
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+				        voxel.position.divideScalar( 5 ).floor().multiplyScalar( 5 ).addScalar( 5 );
+						scene.add( voxel );
+						objects.push( voxel );
+                        
+
+                                 }
+                        if(block3){
+                         cuadrado= document.getElementById("barrera");
+                         cuadrado.style.left="600"+"px";
+                         
+                        var voxel = new THREE.Mesh( cubeGeo, cubeMaterial3 );
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+				        voxel.position.divideScalar( 5 ).floor().multiplyScalar( 5 ).addScalar( 5 );
+						scene.add( voxel );
+						objects.push( voxel );   
+                            
+                            
+                        }
+				               
+						if(block4){
+                         
+                          cuadrado= document.getElementById("barrera");
+                         cuadrado.style.left="650"+"px"; 
+                        var voxel = new THREE.Mesh( cubeGeo, cubeMaterial4 );
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+				        voxel.position.divideScalar( 5 ).floor().multiplyScalar( 5 ).addScalar( 5 );
+						scene.add( voxel );
+						objects.push( voxel );
+                        }
+                        
+                        if(block5){
+                         
+                          cuadrado= document.getElementById("barrera");
+                         cuadrado.style.left="700"+"px"; 
+                        var voxel = new THREE.Mesh( cubeGeo, cubeMaterial5 );
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+				        voxel.position.divideScalar( 5 ).floor().multiplyScalar( 5 ).addScalar( 5 );
+						scene.add( voxel );
+						objects.push( voxel );
+                        }
+                        if(block6){
+                         
+                          cuadrado= document.getElementById("barrera");
+                         cuadrado.style.left="750"+"px"; 
+                        var voxel = new THREE.Mesh( cubeGeo, cubeMaterial6 );
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+				        voxel.position.divideScalar( 5 ).floor().multiplyScalar( 5 ).addScalar( 5 );
+						scene.add( voxel );
+						objects.push( voxel );
+                        }
+                         if(block7){
+                         
+                          cuadrado= document.getElementById("barrera");
+                         cuadrado.style.left="800"+"px"; 
+                        var voxel = new THREE.Mesh( cubeGeo, cubeMaterial7 );
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+				        voxel.position.divideScalar( 5 ).floor().multiplyScalar( 5 ).addScalar( 5 );
+						scene.add( voxel );
+						objects.push( voxel );
+                        }
+                        if(block8){
+                         
+                          cuadrado= document.getElementById("barrera");
+                         cuadrado.style.left="850"+"px"; 
+                        var voxel = new THREE.Mesh( cubeGeo, cubeMaterial8 );
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+				        voxel.position.divideScalar( 5 ).floor().multiplyScalar( 5 ).addScalar( 5 );
+						scene.add( voxel );
+						objects.push( voxel );
+                        }
+
+					}
+
+					render();
+
+				}
+
+			}
+
+			function onDocumentKeyDown( event ) {
+
+				switch ( event.keyCode ) {
+
+					case 16: isShiftDown = true; break;
+                    case 49 : block1 = true; break; 
+                    case 50 : block2 = true; break; 
+                    case 51 : block3 = true; break;
+                    case 52 : block4 = true; break;
+                    case 53 : block5 = true; break;
+                    case 54 : block6 = true; break;
+                    case 55 : block7 = true; break;
+                    case 56 : block8 = true; break;
+
+				}
+
+			}
+
+			function onDocumentKeyUp( event ) {
+
+				switch ( event.keyCode ) {
+
+					case 16: isShiftDown = false; break;
+                    case 49 : block1 = false; break; 
+                    case 50 : block2 = false; break; 
+                    case 51 : block3 = false; break;
+                    case 52 : block4 = false; break;
+                    case 53 : block5 = false; break;
+                    case 54 : block6 = false; break;
+                    case 55 : block7 = false; break;
+                    case 56 : block8 = false; break;
+
+				}
+
+			}
+
+			
+		// Resize Window
+		window.addEventListener("resize", function(){
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+		});
+
+		function render(){
+			renderer.render(scene, camera);
+            var C2T11 = scene.getObjectByName("C2T11");
+        
+            C2T11.translateZ(-200.0);
+            C2T11.rotateY(0.0004);
+            C2T11.translateZ(+200.0); 
+            
+            var C2T12 = scene.getObjectByName("C2T12");
+        
+            C2T12.translateZ(-200.0);
+            C2T12.rotateY(0.0004);
+            C2T12.translateZ(+200.0); 
+            
+            var C2T13 = scene.getObjectByName("C2T13");
+        
+            C2T13.translateZ(-200.0);
+            C2T13.rotateY(0.0004);
+            C2T13.translateZ(+200.0); 
+            
+            var C2T14 = scene.getObjectByName("C2T14");
+        
+            C2T14.translateZ(-200.0);
+            C2T14.rotateY(0.0004);
+            C2T14.translateZ(+200.0); 
+		}
+
+		function GameLoop(){
+			requestAnimationFrame(GameLoop);
+			update();
+			render();
+		}
+
+		GameLoop();
+        // referencias:
+        // https://www.youtube.com/watch?v=eMNdWrx4OPg&list=WL&index=4&ab_channel=HritikRC
+        // https://threejs.org/examples/#webgl_interactive_voxelpainter
+ 	</script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+ <!DOCTYPE html>
+<html>
+  <head>
+    <title>cilindro poligonal</title>
+      <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      html, body { margin: 0; padding: 0; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+    <script src="js/three.js"></script>
+	<script src="js/OrbitControls.js"></script>
+      <script src="js/WebGL.js"></script>
+    <script>
+		var scene, aspect, camera, renderer, controls;
+	
+		init();
+		animate();
+	
+		function init(){
+            if ( WEBGL.isWebGLAvailable() === false ) {
+				document.body.appendChild( WEBGL.getWebGLErrorMessage() );
+			}
+			scene = new THREE.Scene();
+			aspect = window.innerWidth / window.innerHeight;
+			camera = new THREE.PerspectiveCamera( 45, aspect, 0.1, 1000);
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			controls = new THREE.OrbitControls( camera, renderer.domElement );
+			
+			var size = 10;
+			var arrowSize = 1;
+			var divisions = size;
+			var origin = new THREE.Vector3( 0, 0, 0 );
+			var x = new THREE.Vector3( 1, 0, 0 );
+			var y = new THREE.Vector3( 0, 1, 0 );
+		  	var z = new THREE.Vector3( 0, 0, 1 );
+			var color1 = new THREE.Color( 0xFFFFFF );
+		  	var color2 = new THREE.Color( 0x333333 );
+		  	var colorR = new THREE.Color( 0xAA3333 );
+		  	var colorG = new THREE.Color( 0x33AA33 );
+		  	var colorB = new THREE.Color( 0x333366 );
+		  
+		  	//CREAR LAS GRILLAS PARA EL ESCENARIO
+		  	var axesHelper = new THREE.AxesHelper( size );
+		  	var gridHelperXY = new THREE.GridHelper( size, divisions, color1, color1);
+		  	var gridHelperXZ = new THREE.GridHelper( size, divisions, color2, color2 );
+		  	var gridHelperYZ = new THREE.GridHelper( size, divisions, color2, color2 );
+            
+            //ROTARLAS PARA QUE QUEDEN EN EL ESPACIO ADECUADO
+            gridHelperXY.rotateOnWorldAxis ( x, THREE.Math.degToRad(90) );
+            gridHelperXZ.rotateOnWorldAxis ( y, THREE.Math.degToRad(90) );
+            gridHelperYZ.rotateOnWorldAxis ( z, THREE.Math.degToRad(90) );
+            
+            //CREAR LAS FLECHAS QUE INDICAN LOS EJES DE COORDENADAS 3D
+            var arrowX = new THREE.ArrowHelper( x, origin, arrowSize, colorR );
+            var arrowY = new THREE.ArrowHelper( y, origin, arrowSize, colorG );
+            var arrowZ = new THREE.ArrowHelper( z, origin, arrowSize, colorB );
+			
+			//ILUMINACION
+			
+			var hemisphereLight = new THREE.HemisphereLight(0xfffafa,0x000000, .9)
+			scene.add(hemisphereLight);
+			sun = new THREE.DirectionalLight( 0xcdc1c5, 0.9);
+			sun.position.set( 20,-10,0 );
+			sun.castShadow = true;
+			scene.add(sun);
+            
+            //objeto
+            var grassBase = new THREE.TextureLoader().load( 'texture/side41.jpg' );
+            var textureEspuma = new THREE.TextureLoader().load( 'texture/side34.jpg ' );
+            var texture1= new THREE.TextureLoader().load( 'texture/side54.jpg ' );
+            var texture2= new THREE.TextureLoader().load( 'texture/side64.jpg ' );
+            var texture3= new THREE.TextureLoader().load( 'texture/side74.jpg ' );
+            var texture4= new THREE.TextureLoader().load( 'texture/side84.jpg ' );
+            var texture5= new THREE.TextureLoader().load( 'texture/side94.jpg ' );
+            var grassMaterial = new THREE.MeshBasicMaterial( { 
+                    color: 0xffffff,  
+					envMap: scene.background, 
+					map: grassBase,   
+				} );
+            var espumaMaterial = new THREE.MeshBasicMaterial( { 
+                    color: 0xffffff,  
+					envMap: scene.background, 
+					map: textureEspuma,  
+                    
+				} );
+            var espumaMaterial2 = new THREE.MeshBasicMaterial( { 
+                    color: 0xffffff,  
+					envMap: scene.background, 
+					map: texture1,  
+                    
+				} );
+            var espumaMaterial3 = new THREE.MeshBasicMaterial( { 
+                    color: 0xffffff,  
+					envMap: scene.background, 
+					map: texture2,  
+                    
+				} );
+            var espumaMaterial4 = new THREE.MeshBasicMaterial( { 
+                    color: 0xffffff,  
+					envMap: scene.background, 
+					map: texture3,  
+                    
+				} );
+            var espumaMaterial5 = new THREE.MeshBasicMaterial( { 
+                    color: 0xffffff,  
+					envMap: scene.background, 
+					map: texture4,  
+                    
+				} );
+            var espumaMaterial6 = new THREE.MeshBasicMaterial( { 
+                    color: 0xffffff,  
+					envMap: scene.background, 
+					map: texture5,  
+                    
+				} );
+            
+            var geometry = new THREE.CylinderGeometry(5,5,10,8);
+            
+			var triangulo = new THREE.Mesh(geometry,grassMaterial);
+            var triangulo2 = new THREE.Mesh(geometry,espumaMaterial);
+            var triangulo3 = new THREE.Mesh(geometry,espumaMaterial2);
+            var triangulo4 = new THREE.Mesh(geometry,espumaMaterial3);
+            var triangulo5 = new THREE.Mesh(geometry,espumaMaterial4);
+            var triangulo6 = new THREE.Mesh(geometry,espumaMaterial5);
+            scene.add(triangulo);
+            scene.add(triangulo2);
+            scene.add(triangulo3);
+            scene.add(triangulo4);
+            scene.add(triangulo5);
+            scene.add(triangulo6)
+           
+            triangulo.position.x=0;
+            triangulo2.position.x=10;
+            triangulo3.position.x=-10;
+            triangulo4.position.x=10;
+            triangulo4.position.z=10;
+            triangulo5.position.z=10;
+            triangulo6.position.x=-10;
+            triangulo6.position.z=10;
+			
+	
+			//CREACION DE LAS GRILLAS Y DE LAS GUIAS
+            //scene.add( gridHelperXZ );
+		  	scene.add( arrowX );	
+		  	scene.add( arrowY );	
+		  	scene.add( arrowZ );	
+			
+			camera.position.y = 25;	 
+			camera.position.x = 25;	 
+			camera.position.z = 25;	 
+			
+		  	camera.lookAt( origin );
+			}
+    
+    function animate() {
+        render();
+		controls.update();
+        requestAnimationFrame( animate );
+    }
+    
+    function render(){
+        renderer.render( scene, camera );
+    }
+    </script>
+  </body>
+</html>
